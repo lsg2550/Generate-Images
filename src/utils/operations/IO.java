@@ -24,9 +24,10 @@ public class IO {
         BufferedImage img = null;
         try {
             img = ImageIO.read(file);
+            return img;
         } catch (IOException e) {
+            return null;
         }
-        return img;
     }
 
     public static void writeImage(BufferedImage bufferedImage, String fileName) {

@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="GenerateImages.jar" size="127314" download="eager" />
+    <jar href="GenerateImages.jar" size="127244" download="eager" />
     <jar href="lib\ant.jar" size="2036195" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="GenerateImages" >

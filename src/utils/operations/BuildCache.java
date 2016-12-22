@@ -4,13 +4,18 @@ import gfx.GUI;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import utils.notifications.AlertBox;
@@ -35,7 +40,13 @@ public class BuildCache {
                 File[] listOfFiles = selectedDirectory.listFiles((File file, String name)
                         -> name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg")
                 );
-                displayImagesToBeEdited(splitImagesToRespectiveArrayLists(listOfFiles));
+                if (listOfFiles.length > 0) {
+                    displayImagesToBeEdited(splitImagesToRespectiveArrayLists(listOfFiles));
+                } else {
+                    Platform.runLater(() -> {
+                        new AlertBox("No Images Were Found");
+                    });
+                }
             };
             new Thread(task).start();
         }
@@ -157,6 +168,10 @@ public class BuildCache {
                     new AlertBox("Nothing Found");
                     break;
             }
+            try {
+                Thread.sleep(150);
+            } catch (InterruptedException ex) {
+            }
         }
         splitImgs.add(imgA);
         splitImgs.add(imgB);
@@ -188,38 +203,68 @@ public class BuildCache {
         return splitImgs;
     }
 
+    /*
+        Plan: Make Center an HBOX with SCROLLPANE on top, and lone VBOX in Bottom
+        lone VBOX will show how the image will look like once generated 
+        a little complex so will save near end. I want to get img generation done first.
+     */
     private static void displayImagesToBeEdited(ArrayList<ArrayList<BufferedImage>> splitImages) {
-        HBox centerHBox = new HBox(25);
-        centerHBox.setAlignment(Pos.CENTER);
-        Button left = new Button("<<"), //Placed To Avoid Remaking These After Each Iteration
-                right = new Button(">>");
+        /*START: HBOX INSIDE SCROLLPANE*/
+        HBox imageViewHBox = new HBox(2.5);
+        imageViewHBox.setMaxHeight(5);
+        imageViewHBox.setAlignment(Pos.CENTER);
 
-        //Will Take BufferedImages, Place Them Inside ImageViews Created By Different ArrayLists
+        //Builds ImageViews to be added to this.HBox
         for (ArrayList<BufferedImage> splitImage : splitImages) {
             if (!splitImage.isEmpty()) {
-                VBox tempVB = new VBox(10);
+                VBox tempVB = new VBox();
+                Button left = new Button("<<"),
+                        right = new Button(">>");
+                CheckBox enableDisable = new CheckBox();
                 tempVB.setAlignment(Pos.CENTER);
 
-                if (splitImage.size() > 1) { //If there are more than 1 bufferedimage
+                if (splitImage.size() > 1) {
                     ImageView imageView = new ImageView(SwingFXUtils.toFXImage(splitImage.get(0), null));
-                    tempVB.getChildren().addAll(left, imageView, right);
-                    /*
-                    for (BufferedImage bufferedImage : splitImage) {
-                        //ImageView imageView = new ImageView(SwingFXUtils.toFXImage(bufferedImage, null));
-                    }
-                    */
-                } else { //Only 1 bufferedimage
+                    Handlers.directionButton(splitImage, imageView, left, true);
+                    Handlers.directionButton(splitImage, imageView, right, false);
+                    tempVB.getChildren().addAll(left, imageView, right, enableDisable);
+                    imageView.setFitWidth(150);
+                    imageView.setFitHeight(225);
+                } else {
                     ImageView imageView = new ImageView(SwingFXUtils.toFXImage(splitImage.get(0), null));
-                    tempVB.getChildren().add(imageView);
+                    imageView.setFitWidth(150);
+                    imageView.setFitHeight(225);
+                    tempVB.getChildren().addAll(imageView, enableDisable);
                 }
 
-                centerHBox.getChildren().add(tempVB);
+                imageViewHBox.getChildren().add(tempVB);
             }
         }
 
-        ScrollPane sp = new ScrollPane(centerHBox);
+        ScrollPane sp = new ScrollPane(imageViewHBox);
         sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        GUI.setCenterScrollPane(sp);
-    }
-    /*END OF BULIDING CACHE*/
+        sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        sp.setPannable(true);
+        /*END: HBOX INSIDE SCROLLPANE*/
+
+        //Code to generate image to place inside imageview
+        /*START: LONE IMAGEVIEW BELOW SCROLLPANE*/
+        VBox toBeGeneratedVBox = new VBox();
+        toBeGeneratedVBox.setMaxHeight(225);
+        toBeGeneratedVBox.setAlignment(Pos.CENTER);
+        ImageView toBeGeneratedIV = new ImageView(SwingFXUtils.toFXImage(splitImages.get(0).get(0), null));
+        toBeGeneratedIV.setFitWidth(150);
+        toBeGeneratedIV.setFitHeight(225);
+        toBeGeneratedVBox.getChildren().addAll(new Text("Image To Be Generated"), toBeGeneratedIV);
+        /*END: LONE IMAGEVIEW BELOW SCROLLPANE*/
+
+        //Center HBox
+        VBox centerVBox = new VBox(0);
+        VBox.setVgrow(sp, Priority.SOMETIMES);
+        centerVBox.setAlignment(Pos.CENTER);
+        centerVBox.getChildren().addAll(sp, toBeGeneratedVBox);
+        Platform.runLater(() -> {
+            GUI.getRoot().setCenter(centerVBox);
+        });
+    }/*END OF BULIDING CACHE*/
 }

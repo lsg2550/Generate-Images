@@ -21,7 +21,7 @@ public class AlertBox {
     private void alertStage(String Message) {
         //UI
         VBox vb = new VBox(10);
-        Button ok = new Button("Ok");
+        Button ok = new Button("OK");
         Stage stage = new Stage();
         Scene scene = new Scene(vb, 200, 100);
         

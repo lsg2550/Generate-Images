@@ -1,5 +1,6 @@
 package gfx;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import utils.operations.BuildCache;
+import utils.operations.IO;
 
 /**
  *
@@ -47,7 +49,8 @@ public class GUI {
             BuildCache.chooseFolder();
         });
         generateImage.setOnAction(e -> {
-            //IO.writeImage(bufferedImage, fileName);
+            text.setText("Image Created!");
+            IO.writeImage(SwingFXUtils.fromFXImage(BuildCache.getToBeGeneratedIV().getImage(), null), "getUserInput");
         });
 
         //BorderPane

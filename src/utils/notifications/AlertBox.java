@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -14,19 +15,23 @@ import javafx.stage.Stage;
  */
 public class AlertBox {
 
-    public AlertBox(String Message) {
-        alertStage(Message);
+    public AlertBox(String message) {
+        alertStage(message);
     }
 
-    private void alertStage(String Message) {
+    public AlertBox(String message, Scene owner) {
+        alertStage(message, owner);
+    }
+
+    private void alertStage(String message) {
         //UI
         VBox vb = new VBox(10);
         Button ok = new Button("OK");
-        Stage stage = new Stage();
         Scene scene = new Scene(vb, 200, 100);
-        
+        Stage stage = new Stage();
+
         //VBox
-        vb.getChildren().addAll(new Text(Message), ok);
+        vb.getChildren().addAll(new Text(message), ok);
         vb.setAlignment(Pos.CENTER);
 
         //Handlers
@@ -39,6 +44,32 @@ public class AlertBox {
         stage.setAlwaysOnTop(true);
         stage.setResizable(false);
         stage.setScene(scene);
-        stage.showAndWait();
+        stage.show();
+    }
+
+    private void alertStage(String message, Scene owner) {
+        //UI
+        VBox vb = new VBox(10);
+        Button ok = new Button("OK");
+        Scene scene = new Scene(vb, 200, 100);
+        Stage stage = new Stage();
+
+        //VBox
+        vb.getChildren().addAll(new Text(message), ok);
+        vb.setAlignment(Pos.CENTER);
+
+        //Handlers
+        ok.setOnAction(e -> {
+            stage.close();
+        });
+
+        //Stage
+        stage.getIcons().add(GUI.getICON());
+        stage.setAlwaysOnTop(true);
+        stage.setResizable(false);
+        stage.setScene(scene);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(owner.getWindow());
+        stage.show();
     }
 }

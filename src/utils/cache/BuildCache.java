@@ -1,4 +1,4 @@
-package utils.operations;
+package utils.cache;
 
 import gfx.GUI;
 import java.awt.image.BufferedImage;
@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
@@ -19,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import utils.notifications.AlertBox;
+import utils.operations.Handlers;
 import static utils.operations.IO.readImage;
 
 /**
@@ -27,17 +29,50 @@ import static utils.operations.IO.readImage;
  */
 public class BuildCache {
 
+    //UI Objects, to avoid redundancy these will only be created once and re-used.
     private static ImageView toBeGeneratedIV = new ImageView();
     private static HBox imageViewHBox = new HBox(2.5);
     private static VBox toBeGeneratedVBox = new VBox();
 
+    //ArrayLists of Images, to avoid redundancy these will only be created once and re-used.
+    private static ArrayList<ArrayList<BufferedImage>> splitImgs = new ArrayList();
+    private static ArrayList<BufferedImage> imgA = new ArrayList(), //A-Z
+            imgB = new ArrayList(),
+            imgC = new ArrayList(),
+            imgD = new ArrayList(),
+            imgE = new ArrayList(),
+            imgF = new ArrayList(),
+            imgG = new ArrayList(),
+            imgH = new ArrayList(),
+            imgI = new ArrayList(),
+            imgJ = new ArrayList(),
+            imgK = new ArrayList(),
+            imgL = new ArrayList(),
+            imgM = new ArrayList(),
+            imgN = new ArrayList(),
+            imgO = new ArrayList(),
+            imgP = new ArrayList(),
+            imgQ = new ArrayList(),
+            imgR = new ArrayList(),
+            imgS = new ArrayList(),
+            imgT = new ArrayList(),
+            imgU = new ArrayList(),
+            imgV = new ArrayList(),
+            imgW = new ArrayList(),
+            imgX = new ArrayList(),
+            imgY = new ArrayList(),
+            imgZ = new ArrayList();
+    //Owner
+    private static Scene owner;
+
     /*START OF BULIDING CACHE*/
-    public static void chooseFolder() {
+    public static void chooseFolder(Scene scene) {
+        owner = scene;
         DirectoryChooser dChooser = new DirectoryChooser();
         File selectedDirectory = dChooser.showDialog(new Stage());
 
         if (selectedDirectory == null) {
-            new AlertBox("No Directory Was Selected!");
+            new AlertBox("No Directory Was Selected!", owner);
         } else { //Directory was Selected
             Runnable task = () -> {
                 GUI.getDirectoryText().setText(selectedDirectory.getAbsolutePath());
@@ -48,7 +83,7 @@ public class BuildCache {
                     displayImagesToBeEdited(splitImagesToRespectiveArrayLists(listOfFiles));
                 } else {
                     Platform.runLater(() -> {
-                        new AlertBox("No Images Were Found");
+                        new AlertBox("No Images Were Found", owner);
                     });
                 }
             };
@@ -57,33 +92,9 @@ public class BuildCache {
     }
 
     private static ArrayList<ArrayList<BufferedImage>> splitImagesToRespectiveArrayLists(File[] files) {
-        ArrayList<ArrayList<BufferedImage>> splitImgs = new ArrayList();
-        ArrayList<BufferedImage> imgA = new ArrayList(), //A-Z
-                imgB = new ArrayList(),
-                imgC = new ArrayList(),
-                imgD = new ArrayList(),
-                imgE = new ArrayList(),
-                imgF = new ArrayList(),
-                imgG = new ArrayList(),
-                imgH = new ArrayList(),
-                imgI = new ArrayList(),
-                imgJ = new ArrayList(),
-                imgK = new ArrayList(),
-                imgL = new ArrayList(),
-                imgM = new ArrayList(),
-                imgN = new ArrayList(),
-                imgO = new ArrayList(),
-                imgP = new ArrayList(),
-                imgQ = new ArrayList(),
-                imgR = new ArrayList(),
-                imgS = new ArrayList(),
-                imgT = new ArrayList(),
-                imgU = new ArrayList(),
-                imgV = new ArrayList(),
-                imgW = new ArrayList(),
-                imgX = new ArrayList(),
-                imgY = new ArrayList(),
-                imgZ = new ArrayList();
+        Handlers.clearCache(splitImgs, imgA, imgB, imgC, imgD, imgE, imgF, imgG,
+                imgH, imgI, imgJ, imgK, imgL, imgN, imgO, imgP, imgQ, imgR, imgS,
+                imgT, imgU, imgV, imgW, imgX, imgY, imgZ);
 
         for (int i = 0; i < files.length; i++) { //Goes through each file, puts them into respective arraylist
             String temp = files[i].getName().toLowerCase().substring(0, 1);
@@ -169,7 +180,7 @@ public class BuildCache {
                     imgZ.add(readImage(files[i]));
                     break;
                 default:
-                    new AlertBox("Nothing Found");
+                    new AlertBox("Nothing Found", owner);
                     break;
             }
             try {
@@ -177,32 +188,10 @@ public class BuildCache {
             } catch (InterruptedException ex) {
             }
         }
-        splitImgs.add(imgA);
-        splitImgs.add(imgB);
-        splitImgs.add(imgC);
-        splitImgs.add(imgD);
-        splitImgs.add(imgE);
-        splitImgs.add(imgF);
-        splitImgs.add(imgG);
-        splitImgs.add(imgH);
-        splitImgs.add(imgI);
-        splitImgs.add(imgJ);
-        splitImgs.add(imgK);
-        splitImgs.add(imgL);
-        splitImgs.add(imgM);
-        splitImgs.add(imgN);
-        splitImgs.add(imgO);
-        splitImgs.add(imgP);
-        splitImgs.add(imgQ);
-        splitImgs.add(imgR);
-        splitImgs.add(imgS);
-        splitImgs.add(imgT);
-        splitImgs.add(imgU);
-        splitImgs.add(imgV);
-        splitImgs.add(imgW);
-        splitImgs.add(imgX);
-        splitImgs.add(imgY);
-        splitImgs.add(imgZ);
+
+        Handlers.addCache(splitImgs, imgA, imgB, imgC, imgD, imgE, imgF, imgG,
+                imgH, imgI, imgJ, imgK, imgL, imgN, imgO, imgP, imgQ, imgR, imgS,
+                imgT, imgU, imgV, imgW, imgX, imgY, imgZ);
         GUI.getText().setText("Done!");
         return splitImgs;
     }
@@ -232,9 +221,9 @@ public class BuildCache {
                     ImageView imageView = new ImageView(SwingFXUtils.toFXImage(splitImage.get(0), null));
 
                     GUI.getText().setText("Updating GUI..");
-                    ActionEventHandlers.directionButton(splitImage, imageView, left, right);
-                    ActionEventHandlers.enableDisable(imageView, enableDisable, left, right);
-                    ActionEventHandlers.imageViewListener(imageView);
+                    Handlers.directionButton(splitImage, imageView, left, right);
+                    Handlers.enableDisable(imageView, enableDisable, left, right);
+                    Handlers.imageViewListener(imageView);
 
                     tempVB.getChildren().addAll(left, imageView, right, enableDisable);
                     imageView.setFitWidth(150);
@@ -290,7 +279,7 @@ public class BuildCache {
 
     //
     /*START: LIVE BUILDING*/
-    protected static void liveImageBuilding() {
+    public static void liveImageBuilding() {
         ArrayList<BufferedImage> toGeneratedIV = new ArrayList();
         for (Node node : imageViewHBox.getChildren()) {
             ImageView temp = (ImageView) ((VBox) node).getChildren().get(1);

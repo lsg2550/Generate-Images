@@ -1,5 +1,6 @@
 package utils.operations;
 
+import utils.cache.BuildCache;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,13 +9,38 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import utils.cache.BackupImage;
 import utils.notifications.AlertBox;
 
 /**
  *
  * @author Luis
  */
-public class ActionEventHandlers {
+public class Handlers {
+
+    public static void clearCache(ArrayList<ArrayList<BufferedImage>> arrayList, ArrayList<BufferedImage>... arrayLists) {
+        try {
+            arrayList.clear();
+
+            for (ArrayList<BufferedImage> arrayListBI : arrayLists) {
+                arrayListBI.clear();
+            }
+
+            System.gc();
+            Thread.sleep(100);
+        } catch (InterruptedException ex) {
+        }
+    }
+
+    public static void addCache(ArrayList<ArrayList<BufferedImage>> arrayList, ArrayList<BufferedImage>... arrayLists) {
+        try {
+            for (ArrayList<BufferedImage> arrayListBI : arrayLists) {
+                arrayList.add(arrayListBI);
+                Thread.sleep(100);
+            }
+        } catch (InterruptedException ex) {
+        }
+    }
 
     public static void directionButton(ArrayList<BufferedImage> splitImage, ImageView imageView, Button... directionButton) {
         List<Image> images = new ArrayList();
@@ -43,11 +69,13 @@ public class ActionEventHandlers {
     }
 
     public static void enableDisable(ImageView imageView, CheckBox enableDisable, Button... directionButton) {
+        BackupImage bui = new BackupImage();
         enableDisable.selectedProperty().addListener((o, oV, nV) -> {
             if (enableDisable.isSelected()) {
                 Image img = imageView.getImage();
-                savedImage.setImage(img);
+                bui.setImage(img);
 
+                //Disables Buttons and ImageView
                 for (Button button : directionButton) {
                     button.setDisable(true);
                 }
@@ -56,11 +84,12 @@ public class ActionEventHandlers {
                 BufferedImage temp = SwingFXUtils.fromFXImage(img, null);
                 imageView.setImage(SwingFXUtils.toFXImage(IO.toGray(temp), null));
             } else {
+                //Enable Buttons and ImageView
                 for (Button button : directionButton) {
                     button.setDisable(false);
                 }
                 imageView.setDisable(false);
-                imageView.setImage(savedImage.getImage());
+                imageView.setImage(bui.getImage());
             }
             BuildCache.liveImageBuilding();
         });
@@ -70,19 +99,5 @@ public class ActionEventHandlers {
         imageView.imageProperty().addListener((o, oV, nV) -> {
             BuildCache.liveImageBuilding();
         });
-    }
-
-    //Make a backup of current image in imageview
-    private static class savedImage {
-
-        private static Image image;
-
-        public static Image getImage() {
-            return image;
-        }
-
-        public static void setImage(Image aImage) {
-            image = aImage;
-        }
     }
 }

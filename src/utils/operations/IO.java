@@ -23,11 +23,11 @@ public class IO {
         }
     }
 
-    public static void writeImage(BufferedImage bufferedImage, String fileName) {
+    public static void writeImage(BufferedImage bufferedImage, File saveFile) {
         try {
-            File file = new File("src/savedImages/" + fileName + ".png");
-            file.mkdirs();
-            ImageIO.write(bufferedImage, "png", file);
+            String fileType = saveFile.toString();
+            saveFile.mkdirs();
+            ImageIO.write(bufferedImage, fileType.substring(fileType.length() - 3), saveFile);
         } catch (IOException e) {
         }
     }

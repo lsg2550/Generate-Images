@@ -1,6 +1,6 @@
 package utils.notifications;
 
-import gfx.GUI;
+import gfx.gui.GUI;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -19,11 +19,11 @@ import javafx.stage.Stage;
  */
 public class ConfirmationBox {
 
-    public ConfirmationBox(Scene owner) {
-        confirmStage(owner);
+    public ConfirmationBox(Scene owner, File location) {
+        confirmStage(owner, location);
     }
 
-    private void confirmStage(Scene owner) {
+    private void confirmStage(Scene owner, File location) {
         //UI
         VBox vb = new VBox(10);
         HBox hb = new HBox(10);
@@ -45,7 +45,7 @@ public class ConfirmationBox {
             try {
                 stage.close();
                 Desktop dt = Desktop.getDesktop();
-                dt.open(new File("src/savedImages/getUserInput.png"));
+                dt.open(location);
             } catch (IOException ex) {
             }
         });

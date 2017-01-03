@@ -1,6 +1,6 @@
 package launcher;
 
-import gfx.GUI;
+import gfx.gui.GUI;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

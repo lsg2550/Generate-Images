@@ -1,0 +1,25 @@
+.root{
+    -fx-background-color: #c5b373;
+}
+
+.scroll-pane{
+    -fx-background: #c5b373;
+    -fx-control-inner-background: #c5b373;
+    -fx-border-color: #c5b373;
+}
+
+.image-view{
+    -fx-background-color: #c5b373;
+}
+
+.button{
+    -fx-border-color: black;
+    -fx-border-radius: 4;
+    -fx-background-color: linear-gradient(#c5b373, lightgray);
+}
+
+.progress-bar{
+    -fx-control-inner-background: #c5b373;
+    -fx-border-color: #c5b373;
+    -fx-accent: gray;
+}

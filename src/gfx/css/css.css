@@ -8,6 +8,19 @@
     -fx-control-inner-background: #c5b373;
 }
 
+.button{
+    -fx-border-color: black;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-background-color: linear-gradient(#c5b373, lightgray);
+}
+
+.progress-bar{
+    -fx-control-inner-background: #c5b373;
+    -fx-border-color: #c5b373;
+    -fx-accent: gray;
+}
+
 .check-box .box{
     -fx-background-color: linear-gradient(#c5b373, lightgray);
     -fx-border-color: black;
@@ -21,17 +34,4 @@
 .check-box:selected .mark{
     -fx-background-color: linear-gradient(lightgray, #c5b373);
     -fx-border-color: black;
-}
-
-.button{
-    -fx-border-color: black;
-    -fx-border-radius: 4;
-    -fx-background-radius: 4;
-    -fx-background-color: linear-gradient(#c5b373, lightgray);
-}
-
-.progress-bar{
-    -fx-control-inner-background: #c5b373;
-    -fx-border-color: #c5b373;
-    -fx-accent: gray;
 }

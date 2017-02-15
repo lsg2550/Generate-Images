@@ -75,3 +75,9 @@ dist/*
 dist/
 []/*
 []/
+build\*
+build\
+dist\*
+dist\
+[]\*
+[]\

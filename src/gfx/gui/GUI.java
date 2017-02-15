@@ -9,38 +9,44 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import utils.cache.BuildCache;
+import utils.caching.BuildCache;
 import utils.notifications.AlertBox;
-import utils.notifications.ConfirmationBox;
-import utils.operations.Chooser;
+import utils.operations.FileSelector;
 
 /**
  *
  * @author Luis
  */
 public class GUI {
-    
+
+    //Icon
     private static final Image ICON = new Image("assets/ico/ico.png");
-    private static ProgressBar pBar = new ProgressBar(0); //Diplays How Much Loading Of Files Is Done
+
+    //Main Stage GUI Nodes
     private static BorderPane root = new BorderPane();
+    private static Scene scene = new Scene(root, 800, 600);
+    private static Stage stage = new Stage();
+
+    //Objects belong to the GUI that are updated by BuildCache.java
+    private static ProgressBar pBar = new ProgressBar(0); //Diplays How Much Loading Of Files Is Done
     private static Text text = new Text(), //Display What Files The App Is Reading
             directoryText = new Text(); //Display Directory Being Read
+
+    //Notifications
+    private static AlertBox aBox = new AlertBox();
 
     public GUI() {
         mainStage();
         BuildCache.init();
-        Chooser.init();
+        FileSelector.init();
     }
-    
+
     private void mainStage() {
         //UI
         HBox topHBox = new HBox(5),
                 bottomHBox = new HBox(5);
         Button folderSelect = new Button("Select Folder"),
                 generateImage = new Button("Generate Image");
-        Scene scene = new Scene(root, 800, 600);
-        Stage stage = new Stage();
 
         //HBoxes
         topHBox.getChildren().addAll(folderSelect, generateImage, directoryText);
@@ -53,14 +59,16 @@ public class GUI {
         //Button Handlers
         generateImage.setDisable(true);
         folderSelect.setOnAction(e -> {
-            BuildCache.chooseFolder(scene);
+            BuildCache.chooseFolder();
         });
         generateImage.setOnAction(e -> {
             try {
-                Chooser.writeFile();
-                new ConfirmationBox(scene, Chooser.getSaveFile());
+                FileSelector.writeFile();
+                //Until I figure out how to properly add modality to the confirmation box, I'll leave it out
+                //ConfirmationBox cBox = new ConfirmationBox();
+                //cBox.show(Chooser.getSaveFile());
             } catch (NullPointerException ex) {
-                new AlertBox("Image Was Not Saved!", scene);
+                aBox.show("Image Was Not Saved!");
             }
         });
 
@@ -72,7 +80,7 @@ public class GUI {
                 generateImage.setDisable(false);
             }
         });
-        
+
         scene.getStylesheets().add("gfx/css/css.css");
         stage.setTitle("Generate Image");
         stage.getIcons().add(ICON);
@@ -83,24 +91,28 @@ public class GUI {
             stage.close();
         });
     }
-    
+
     public static Image getICON() {
         return ICON;
     }
-    
+
     public static ProgressBar getpBar() {
         return pBar;
     }
-    
+
     public static Text getText() {
         return text;
     }
-    
+
     public static Text getDirectoryText() {
         return directoryText;
     }
-    
+
     public static BorderPane getRoot() {
         return root;
+    }
+
+    public static Scene getScene() {
+        return scene;
     }
 }

@@ -19,35 +19,40 @@ import javafx.stage.Stage;
  */
 public class ConfirmationBox {
 
-    public ConfirmationBox(Scene owner, File location) {
-        confirmStage(owner, location);
+    private Stage stage = new Stage();
+    private Desktop dt;
+
+    public ConfirmationBox() {
+        buildStage();
     }
 
-    private void confirmStage(Scene owner, File location) {
+    private void buildStage() {
         //UI
         VBox vb = new VBox(10);
         HBox hb = new HBox(10);
         Button yes = new Button("Yes"),
                 no = new Button("No");
+        Text text = new Text("Would you like to open the image?");
         Scene scene = new Scene(vb, 200, 100);
-        Stage stage = new Stage();
 
         //HBox
         hb.getChildren().addAll(yes, no);
         hb.setAlignment(Pos.CENTER);
 
         //VBox
-        vb.getChildren().addAll(new Text("Would you like to open the image?"), hb);
+        vb.getChildren().addAll(text, hb);
         vb.setAlignment(Pos.CENTER);
 
         //Handlers
         yes.setOnAction(e -> {
+            /*
             try {
                 stage.close();
-                Desktop dt = Desktop.getDesktop();
+                dt = Desktop.getDesktop();
                 dt.open(location);
             } catch (IOException ex) {
             }
+             */
         });
         no.setOnAction(e -> {
             stage.close();
@@ -59,7 +64,10 @@ public class ConfirmationBox {
         stage.setResizable(false);
         stage.setScene(scene);
         stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(owner.getWindow());
+        stage.initOwner(GUI.getScene().getWindow());
+    }
+
+    public void show(File location) {
         stage.show();
     }
 }

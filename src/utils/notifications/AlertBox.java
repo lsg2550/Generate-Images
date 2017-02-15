@@ -15,19 +15,21 @@ import javafx.stage.Stage;
  */
 public class AlertBox {
 
-    public AlertBox(String message, Scene owner) {
-        alertStage(message, owner);
+    //UI
+    private Stage stage = new Stage(); //Stage
+    private VBox vb = new VBox(10);
+
+    public AlertBox() {
+        buildStage();
     }
 
-    private void alertStage(String message, Scene owner) {
+    private void buildStage() {
         //UI
-        VBox vb = new VBox(10);
         Button ok = new Button("OK");
         Scene scene = new Scene(vb, 200, 100);
-        Stage stage = new Stage();
 
         //VBox
-        vb.getChildren().addAll(new Text(message), ok);
+        vb.getChildren().addAll(new Text(""), ok);
         vb.setAlignment(Pos.CENTER);
 
         //Handlers
@@ -41,7 +43,12 @@ public class AlertBox {
         stage.setResizable(false);
         stage.setScene(scene);
         stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(owner.getWindow());
+        stage.initOwner(GUI.getScene().getWindow());
+    }
+
+    public void show(String message) {
+        vb.getChildren().remove(0);
+        vb.getChildren().add(0, new Text(message));
         stage.show();
     }
 }

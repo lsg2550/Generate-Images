@@ -61,3 +61,11 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Custom Folders
+build/*
+build/
+dist/*
+dist/
+[]/*
+[]/

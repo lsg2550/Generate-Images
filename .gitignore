@@ -64,8 +64,15 @@ $RECYCLE.BIN/
 
 # Custom Folders
 build/*/*/*/*/*/*
-build/
 dist/*/*/*/*/*/*
-dist/
 []/*/*/*/*/*/*
+build/
+dist/
 []/
+
+/build/*/*/*/*/*/*
+/dist/*/*/*/*/*/*
+/[]/*/*/*/*/*/*
+/build
+/dist
+/[]

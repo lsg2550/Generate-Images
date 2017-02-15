@@ -63,6 +63,12 @@ $RECYCLE.BIN/
 *.lnk
 
 # Custom Folders
+/build/*
+/build/
+/dist/*
+/dist/
+/[]/*
+/[]/
 build/*
 build/
 dist/*

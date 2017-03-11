@@ -3,6 +3,9 @@ package gfx.gui;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -45,11 +48,22 @@ public class GUI {
         //UI
         HBox topHBox = new HBox(5),
                 bottomHBox = new HBox(5);
-        Button folderSelect = new Button("Select Folder"),
-                generateImage = new Button("Generate Image");
+
+        //Menu
+        MenuBar menuBar = new MenuBar();
+        Menu file = new Menu("_File"), help = new Menu("_Help");
+        file.setMnemonicParsing(true);
+        help.setMnemonicParsing(true);
+        MenuItem folderSelect = new MenuItem("Open"),
+                generateImage = new MenuItem("Save"),
+                exit = new MenuItem("Exit"),//end File Menu
+                about = new MenuItem("About"); //end Help Menu
+        menuBar.getMenus().addAll(file, help);
+        file.getItems().addAll(folderSelect, generateImage, exit);
+        help.getItems().add(about);
 
         //HBoxes
-        topHBox.getChildren().addAll(folderSelect, generateImage, directoryText);
+        topHBox.getChildren().addAll(menuBar, directoryText);
         bottomHBox.getChildren().addAll(pBar, text);
         topHBox.setAlignment(Pos.CENTER);
         bottomHBox.setAlignment(Pos.CENTER);

@@ -19,6 +19,7 @@ import javafx.scene.text.Text;
 import utils.notifications.AlertBox;
 import utils.operations.FileSelector;
 import static utils.operations.IO.readImage;
+import utils.operations.TryImageView;
 
 /**
  *
@@ -216,25 +217,41 @@ public class BuildCache {
             for (ArrayList<BufferedImage> splitImage : splitImages) { //Builds ImageViews to be added to this.HBox
                 GUI.getText().setText("Updating GUI.");
 
+                /*MEMORY LEAK SUSPECT*/
                 if (!splitImage.isEmpty()) { //Builds New VBox per ImageView
+
                     //UI
                     VBox tempVB = new VBox();
-                    Button left = new Button("<<"), right = new Button(">>");
                     CheckBox enableDisable = new CheckBox();
 
-                    //Details
-                    ImageView imageView = new ImageView(SwingFXUtils.toFXImage(splitImage.get(0), null));
-                    tempVB.getChildren().addAll(left, imageView, right, enableDisable);
-                    tempVB.setAlignment(Pos.CENTER);
-                    imageView.setFitWidth(225);
-                    imageView.setFitHeight(225);
+                    if (splitImage.size() == 1) {
+                        //Details
+                        ImageView imageView = new ImageView(SwingFXUtils.toFXImage(splitImage.get(0), null));
+                        tempVB.getChildren().addAll(imageView, enableDisable);
+                        tempVB.setAlignment(Pos.CENTER);
+                        imageView.setFitWidth(225);
+                        imageView.setFitHeight(225);
 
-                    GUI.getText().setText("Updating GUI.."); //Updating GUI
+                        //Handlers
+                        Handlers.enableDisable(imageView, enableDisable);
+                        Handlers.imageViewStageBuilder(imageView);
+                        Handlers.imageViewListener(imageView);
+                    } else {
+                        Button left = new Button("<<"), right = new Button(">>");
 
-                    //Handlers
-                    Handlers.directionButton(splitImage, imageView, left, right);
-                    Handlers.enableDisable(imageView, enableDisable, left, right);
-                    Handlers.imageViewListener(imageView);
+                        //Details
+                        ImageView imageView = new ImageView(SwingFXUtils.toFXImage(splitImage.get(0), null));
+                        tempVB.getChildren().addAll(left, imageView, right, enableDisable);
+                        tempVB.setAlignment(Pos.CENTER);
+                        imageView.setFitWidth(225);
+                        imageView.setFitHeight(225);
+
+                        //Handlers
+                        Handlers.directionButton(splitImage, imageView, left, right);
+                        Handlers.enableDisable(imageView, enableDisable, left, right);
+                        Handlers.buildSubMenu(splitImage, imageView);
+                        //Handlers.imageViewListener(imageView);
+                    }
 
                     //Updating GUI & Adding VBox to Center HBox
                     Platform.runLater(() -> {
@@ -249,7 +266,7 @@ public class BuildCache {
 
             //
             GUI.getpBar().setProgress(0.60);
-            liveImageBuilding();
+            //liveImageBuilding();
             //
 
             /*START: CENTER VBOX*/
@@ -268,12 +285,26 @@ public class BuildCache {
     /*START: LIVE BUILDING*/
     public static void liveImageBuilding() {
         toGeneratedIV.clear();
+
+        /*
         for (Node node : imageViewHBox.getChildren()) {
-            ImageView temp = (ImageView) ((VBox) node).getChildren().get(1);
+            ImageView temp = null;
+            VBox vbox = (VBox) node;
+            
+            for (Node n : vbox.getChildren()) {
+                if (TryImageView.TryImageView(n)) {
+                    temp = (ImageView) n;
+                }
+            }
+            
             if (!temp.isDisabled()) {
                 toGeneratedIV.add(SwingFXUtils.fromFXImage(temp.getImage(), null));
             }
+        }*/
+        for (ImageView imageView : BuildMenu.test) {
+            toGeneratedIV.add(SwingFXUtils.fromFXImage(imageView.getImage(), null));
         }
+
         toBeGeneratedIV.setImage(SwingFXUtils.toFXImage(BuildImage.buildImageLive(toGeneratedIV), null));
     }/*END: LIVE BUILDING*/
 
@@ -301,5 +332,9 @@ public class BuildCache {
 
     public static ImageView getToBeGeneratedIV() {
         return toBeGeneratedIV;
+    }
+
+    public static ArrayList<ArrayList<BufferedImage>> getSplitImgs() {
+        return splitImgs;
     }
 }

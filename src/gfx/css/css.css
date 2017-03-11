@@ -8,6 +8,14 @@
     -fx-control-inner-background: #c5b373;
 }
 
+.menu-bar{
+    -fx-text-alignment: center;
+    -fx-border-color: black;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-background-color: linear-gradient(#c5b373, lightgray);
+}
+
 .button{
     -fx-border-color: black;
     -fx-border-radius: 4;

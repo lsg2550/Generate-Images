@@ -11,9 +11,6 @@ class BackupImage {
     //Make a backup of current image in imageview
     private Image image;
 
-    protected BackupImage() {
-    }
-
     protected Image getImage() {
         return image;
     }

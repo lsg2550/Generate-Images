@@ -1,4 +1,4 @@
-package utils.operations;
+package utils.operations.parsing;
 
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;

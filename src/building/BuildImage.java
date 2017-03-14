@@ -1,4 +1,4 @@
-package utils.caching;
+package building;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class BuildImage {
 
     public static BufferedImage buildImageLive(ArrayList<BufferedImage> img) {
+
         try {
             Graphics2D g = img.get(0).createGraphics();
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -25,5 +26,6 @@ public class BuildImage {
         } catch (IndexOutOfBoundsException e) {
             return new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
         }
+
     }
 }

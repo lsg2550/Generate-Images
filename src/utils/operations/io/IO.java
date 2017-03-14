@@ -1,11 +1,13 @@
-package utils.operations;
+package utils.operations.io;
 
-import java.awt.color.ColorSpace;
+import building.GeneratedImage;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import static utils.operations.io.FileSelector.filechooser;
+import static utils.operations.io.FileSelector.saveFile;
 
 /**
  *
@@ -32,9 +34,8 @@ public class IO {
         }
     }
 
-    public static BufferedImage toGray(BufferedImage original) {
-        BufferedImage gray = new BufferedImage(original.getWidth(), original.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        ColorConvertOp op = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
-        return op.filter(original, gray);
+    public static void writeFile() {
+        saveFile = filechooser.showSaveDialog(null);
+        IO.writeImage(GeneratedImage.getGeneratedImage(), saveFile);
     }
 }

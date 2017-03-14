@@ -1,10 +1,10 @@
-package utils.operations;
+package utils.operations.io;
 
 import java.io.File;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import utils.caching.BuildCache;
+import building.BuildCache;
 
 /**
  *
@@ -16,10 +16,10 @@ public class FileSelector {
     private static DirectoryChooser dChooser = new DirectoryChooser();
 
     //Saving File
-    private static FileChooser filechooser = new FileChooser();
+    static FileChooser filechooser = new FileChooser();
 
     //File
-    private static File saveFile;
+    static File saveFile;
 
     public static void init() {
         filechooser.setTitle("Save Image");
@@ -37,14 +37,5 @@ public class FileSelector {
         } else {
             return null;
         }
-    }
-
-    public static void writeFile() {
-        saveFile = filechooser.showSaveDialog(null);
-        IO.writeImage(SwingFXUtils.fromFXImage(BuildCache.getToBeGeneratedIV().getImage(), null), saveFile);
-    }
-
-    public static File getSaveFile() {
-        return saveFile;
     }
 }

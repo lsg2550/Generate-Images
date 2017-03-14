@@ -1,5 +1,6 @@
 package utils.notifications;
 
+import assets.ico.Icon;
 import gfx.gui.GUI;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,8 +17,11 @@ import javafx.stage.Stage;
 public class AlertBox {
 
     //UI
-    private Stage stage = new Stage(); //Stage
+    private Stage stage = new Stage();
     private VBox vb = new VBox(10);
+
+    //Message
+    private Text message = new Text("");
 
     public AlertBox() {
         buildStage();
@@ -29,7 +33,7 @@ public class AlertBox {
         Scene scene = new Scene(vb, 200, 100);
 
         //VBox
-        vb.getChildren().addAll(new Text(""), ok);
+        vb.getChildren().addAll(message, ok);
         vb.setAlignment(Pos.CENTER);
 
         //Handlers
@@ -38,7 +42,7 @@ public class AlertBox {
         });
 
         //Stage
-        stage.getIcons().add(GUI.getICON());
+        stage.getIcons().add(Icon.ICON);
         stage.setAlwaysOnTop(true);
         stage.setResizable(false);
         stage.setScene(scene);
@@ -47,8 +51,7 @@ public class AlertBox {
     }
 
     public void show(String message) {
-        vb.getChildren().remove(0);
-        vb.getChildren().add(0, new Text(message));
+        this.message.setText(message);
         stage.show();
     }
 }

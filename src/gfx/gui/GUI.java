@@ -1,20 +1,27 @@
 package gfx.gui;
 
+import assets.ico.Icon;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import utils.caching.BuildCache;
+import building.BuildCache;
+import com.sun.javafx.css.StyleManager;
+import gfx.gui.nodes.FileRead;
+import gfx.gui.nodes.Progress;
+import gfx.gui.nodes.SelectedDirectory;
+import javafx.scene.control.SeparatorMenuItem;
+import utils.benchmarking.Logging;
+import utils.benchmarking.MemoryUsage;
 import utils.notifications.AlertBox;
-import utils.operations.FileSelector;
+import utils.operations.io.FileSelector;
+import utils.operations.io.IO;
+import utils.operations.styling.SetStyles;
+import utils.operations.styling.Styles;
 
 /**
  *
@@ -22,18 +29,10 @@ import utils.operations.FileSelector;
  */
 public class GUI {
 
-    //Icon
-    private static final Image ICON = new Image("assets/ico/ico.png");
-
     //Main Stage GUI Nodes
     private static BorderPane root = new BorderPane();
     private static Scene scene = new Scene(root, 800, 600);
     private static Stage stage = new Stage();
-
-    //Objects belong to the GUI that are updated by BuildCache.java
-    private static ProgressBar pBar = new ProgressBar(0); //Diplays How Much Loading Of Files Is Done
-    private static Text text = new Text(), //Display What Files The App Is Reading
-            directoryText = new Text(); //Display Directory Being Read
 
     //Notifications
     private static AlertBox aBox = new AlertBox();
@@ -51,39 +50,61 @@ public class GUI {
 
         //Menu
         MenuBar menuBar = new MenuBar();
-        Menu file = new Menu("_File"), help = new Menu("_Help");
-        file.setMnemonicParsing(true);
-        help.setMnemonicParsing(true);
+        Menu file = new Menu("File"),
+                help = new Menu("Help"),
+                benchmarking = new Menu("Benchmarking"),
+                themeSelect = new Menu("Select Theme");
         MenuItem folderSelect = new MenuItem("Open"),
                 generateImage = new MenuItem("Save"),
                 exit = new MenuItem("Exit"),//end File Menu
-                about = new MenuItem("About"); //end Help Menu
+                about = new MenuItem("About"),
+                themeOne = new MenuItem("Persian"),
+                themeTwo = new MenuItem("Rainy Day"),
+                memoryUsage = new MenuItem("Memory Usage"),
+                timeBenchmark = new MenuItem("Run Time"); //end Help Menu
         menuBar.getMenus().addAll(file, help);
-        file.getItems().addAll(folderSelect, generateImage, exit);
-        help.getItems().add(about);
+        file.getItems().addAll(folderSelect, generateImage, new SeparatorMenuItem(), exit);
+        help.getItems().addAll(about, themeSelect, benchmarking);
+        benchmarking.getItems().addAll(memoryUsage, timeBenchmark);
+        themeSelect.getItems().addAll(themeOne, themeTwo);
+        generateImage.setDisable(true);
 
         //HBoxes
-        topHBox.getChildren().addAll(menuBar, directoryText);
-        bottomHBox.getChildren().addAll(pBar, text);
+        topHBox.getChildren().addAll(menuBar, SelectedDirectory.getDirectoryRead());
+        bottomHBox.getChildren().addAll(Progress.getpBar(), FileRead.getFileRead());
         topHBox.setAlignment(Pos.CENTER);
         bottomHBox.setAlignment(Pos.CENTER);
         topHBox.setMaxHeight(16);
         bottomHBox.setMaxHeight(16);
 
         //Button Handlers
-        generateImage.setDisable(true);
         folderSelect.setOnAction(e -> {
             BuildCache.chooseFolder();
         });
         generateImage.setOnAction(e -> {
             try {
-                FileSelector.writeFile();
-                //Until I figure out how to properly add modality to the confirmation box, I'll leave it out
-                //ConfirmationBox cBox = new ConfirmationBox();
-                //cBox.show(Chooser.getSaveFile());
+                IO.writeFile();
             } catch (NullPointerException ex) {
                 aBox.show("Image Was Not Saved!");
             }
+        });
+        exit.setOnAction(e -> {
+            stage.close();
+        });
+        about.setOnAction(e -> {
+
+        });
+        memoryUsage.setOnAction(e -> {
+            System.out.println("Current Memory Used: " + MemoryUsage.memoryUsageInMBytes() + " MB");
+        });
+        timeBenchmark.setOnAction(e -> {
+            System.out.println("Time to Load Directory: " + Logging.benchmarkTimeInSeconds() + " seconds");
+        });
+        themeOne.setOnAction(e -> {
+            SetStyles.changeStyle(Styles.persian);
+        });
+        themeTwo.setOnAction(e -> {
+            SetStyles.changeStyle(Styles.rainyDay);
         });
 
         //BorderPane
@@ -95,31 +116,18 @@ public class GUI {
             }
         });
 
-        scene.getStylesheets().add("gfx/css/css.css");
         stage.setTitle("Generate Image");
-        stage.getIcons().add(ICON);
+        stage.getIcons().add(Icon.ICON);
         stage.setScene(scene);
         stage.show();
+
+        scene.getStylesheets().add(Styles.persian);
+        StyleManager.getInstance().addUserAgentStylesheet(Styles.persian);
+
         stage.setOnCloseRequest(e -> {
             Thread.currentThread().interrupt();
             stage.close();
         });
-    }
-
-    public static Image getICON() {
-        return ICON;
-    }
-
-    public static ProgressBar getpBar() {
-        return pBar;
-    }
-
-    public static Text getText() {
-        return text;
-    }
-
-    public static Text getDirectoryText() {
-        return directoryText;
     }
 
     public static BorderPane getRoot() {

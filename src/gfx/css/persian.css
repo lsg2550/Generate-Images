@@ -1,0 +1,107 @@
+.root{
+    -fx-background-color: #1c5125;
+}
+
+.scroll-pane{
+    -fx-border-color: black;
+    -fx-background: #1c5125;
+    -fx-control-inner-background: #1c5125;
+}
+
+.button{
+    -fx-border-color: black;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-background-color: #1c5125;
+    -fx-text-fill: whitesmoke;
+}
+
+.progress-bar{
+    -fx-control-inner-background: #1c5125;
+    -fx-border-color: #1c5125;
+    -fx-accent: gray;
+}
+
+/*CheckBox*/
+.check-box .box{
+    -fx-background-color: linear-gradient(#1c5125, #e5a339);
+    -fx-border-color: black;
+}
+
+.check-box:selected .box{
+    -fx-background-color: linear-gradient(#e5a339, #71a559);
+    -fx-border-color: black;
+}
+
+.check-box:selected .mark{
+    -fx-background-color: linear-gradient(#e5a339, #71a559);
+    -fx-border-color: black;
+}
+
+/*Menu-Bar*/
+.menu-bar{
+    -fx-background-color: #e5a339;
+    -fx-background-radius: 0 0 5 5;
+    -fx-border-color: black;
+    -fx-border-radius: 0 0 5 5;
+}
+
+/*Menu*/
+.menu{
+    -fx-background-color: #e5a339;
+}
+
+.menu .label{
+    -fx-text-fill: black;
+}
+
+.menu:hover{
+    -fx-background-color: transparent;
+    -fx-underline: true;
+}
+
+.menu:hover .label{
+    -fx-text-fill: #71a559;
+}
+
+.menu:focus{
+    -fx-background-color: transparent;
+    -fx-underline: true;
+}
+
+.menu:focus .label{
+    -fx-text-fill: #71a559;
+}
+
+/*Menu-Item*/
+.context-menu{
+    -fx-background-color: #71a559;
+    -fx-background-radius: 0 0 5 5;
+    -fx-border-radius: 0 0 5 5;
+}
+
+.context-menu .menu-item{
+    -fx-background-color: #71a559;
+}
+
+.context-menu .menu-item .label{
+    -fx-text-fill: black;
+}
+
+.context-menu .menu-item:hover{
+    -fx-background-color: #71a559;
+}
+
+.context-menu .menu-item:hover .label{
+    -fx-text-fill: #e5a339;
+    -fx-underline: true;
+}
+
+.context-menu .menu-item:focus{
+    -fx-background-color: #71a559;
+}
+
+.context-menu .menu-item:focus .label{
+    -fx-text-fill: #e5a339;
+    -fx-underline: true;
+}

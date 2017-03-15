@@ -46,6 +46,7 @@ public class BuildCache {
 
             Runnable task = () -> {
 
+                FileSelector.setDirectory(selectedDirectory.getParentFile());
                 SelectedDirectory.setText(selectedDirectory.getAbsolutePath());
 
                 File[] listOfFiles = selectedDirectory.listFiles((File file, String name)
@@ -75,6 +76,7 @@ public class BuildCache {
 
     private static void splitImagesToRespectiveArrayLists(File[] files) {
         ImageList.clearCache();
+        System.gc();
 
         String fileName;
         String toArrayList;
@@ -177,10 +179,9 @@ public class BuildCache {
     private static void displayImagesToBeEdited() {
 
         Platform.runLater(() -> {
-            Progress.setProgress(0);
             GUI.getRoot().setCenter(null);
-            imageViewHBox.getChildren().clear();
             toBeGeneratedIV.setImage(null);
+            imageViewHBox.getChildren().clear();
         });
 
         int counter = 0; //Restarting/Starting Counter

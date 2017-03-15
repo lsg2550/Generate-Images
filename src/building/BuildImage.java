@@ -24,6 +24,7 @@ public class BuildImage {
             g.dispose();
             return img.get(0);
         } catch (IndexOutOfBoundsException e) {
+            //e.printStackTrace();
             return new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
         }
 

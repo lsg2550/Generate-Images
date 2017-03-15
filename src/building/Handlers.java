@@ -42,6 +42,8 @@ class Handlers {
 
                 //Details
                 EnhancedImageView innerImageView = new EnhancedImageView(SwingFXUtils.toFXImage(bufferedImage, null));
+                innerImageView.setFitWidth(250);
+                innerImageView.setFitHeight(250);
                 tempVB.getChildren().addAll(innerImageView, enableDisable);
                 tempVB.setAlignment(Pos.CENTER);
 
@@ -58,9 +60,10 @@ class Handlers {
             sp.setPannable(true);
             sp.setContent(hb);
 
-            Scene scene = new Scene(sp, 600, 250);
+            Scene scene = new Scene(sp, 600, 275);
 
             Platform.runLater(() -> {
+
                 Stage stage = new Stage();
                 stage.getIcons().add(Icon.ICON);
                 stage.initModality(Modality.WINDOW_MODAL);
@@ -71,6 +74,7 @@ class Handlers {
                 extend.setOnMouseClicked(e -> {
                     stage.show();
                 });
+
             });
 
         }).start();
@@ -81,8 +85,7 @@ class Handlers {
     static void imageViewStageBuilder(EnhancedImageView eImageView) {
         new Thread(() -> {
 
-            ImageView imageV = new ImageView(eImageView.getImage());
-            imageV.setPreserveRatio(true);
+            ImageView imageV = new ImageView();
 
             StackPane sp = new StackPane();
             sp.getChildren().add(imageV);
@@ -109,25 +112,28 @@ class Handlers {
 
     //SetOnAction for the Checkbox
     static void enableDisable(EnhancedImageView eImageView, CheckBox enableDisable) {
+        new Thread(() -> {
 
-        enableDisable.selectedProperty().addListener((o, oV, nV) -> {
+            enableDisable.selectedProperty().addListener(e -> {
 
-            if (enableDisable.isSelected()) {
+                if (enableDisable.isSelected()) {
 
-                ImageList.outputImages.remove(eImageView);
-                eImageView.applyGrayscale();
+                    ImageList.outputImages.remove(eImageView);
+                    ImageList.outputImages.trimToSize();
+                    eImageView.applyGrayscale();
 
-            } else {
+                } else {
 
-                ImageList.outputImages.add(eImageView);
-                eImageView.removeEffect();
+                    ImageList.outputImages.add(eImageView);
+                    eImageView.removeEffect();
 
-            }
+                }
 
-        });
+            });
 
-        enableDisable.setSelected(true);
+            enableDisable.setSelected(true);
 
+        }).start();
     }
 
     //When the user enables/disables an imageview this method will be called to 
@@ -141,14 +147,18 @@ class Handlers {
     //This method is called whenever there is a change in the ImageViews in the
     //program. e.g. When they're enabled or disabled
     static void liveImageBuilding() {
-        toGeneratedIV.clear();
+        new Thread(() -> {
 
-        ImageList.outputImages.forEach((eImageView) -> {
-            toGeneratedIV.add(SwingFXUtils.fromFXImage(eImageView.getImage(), null));
-        });
+            toGeneratedIV.clear();
 
-        BufferedImage genImg = BuildImage.buildImageLive(toGeneratedIV);
-        GeneratedImage.setGeneratedImage(genImg);
-        BuildCache.toBeGeneratedIV.setImage(SwingFXUtils.toFXImage(genImg, null));
+            ImageList.outputImages.forEach((eImageView) -> {
+                toGeneratedIV.add(SwingFXUtils.fromFXImage(eImageView.getImage(), null));
+            });
+
+            BufferedImage genImg = BuildImage.buildImageLive(toGeneratedIV);
+            GeneratedImage.setGeneratedImage(genImg);
+            BuildCache.toBeGeneratedIV.setImage(SwingFXUtils.toFXImage(genImg, null));
+
+        }).start();
     }
 }

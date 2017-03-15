@@ -21,6 +21,7 @@ public class IO {
             img = ImageIO.read(file);
             return img;
         } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -31,6 +32,7 @@ public class IO {
             saveFile.mkdirs();
             ImageIO.write(bufferedImage, fileType.substring(fileType.length() - 3), saveFile);
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -8,7 +8,7 @@ import javafx.scene.text.Text;
  */
 public class SelectedDirectory {
 
-    private static Text directoryRead = new Text();
+    private static Text directoryRead = new Text("");
 
     public static void setText(String message) {
         directoryRead.setText(message);

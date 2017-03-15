@@ -86,6 +86,7 @@ public class GUI {
                 IO.writeFile();
             } catch (NullPointerException ex) {
                 aBox.show("Image Was Not Saved!");
+                //ex.printStackTrace();
             }
         });
         exit.setOnAction(e -> {

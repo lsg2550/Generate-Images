@@ -15,6 +15,7 @@ public class TryImageView {
             ImageView imgV = (ImageView) node;
             return true;
         } catch (ClassCastException e) {
+            e.printStackTrace();
             return false;
         }
     }

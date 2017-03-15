@@ -38,4 +38,8 @@ public class FileSelector {
             return null;
         }
     }
+
+    public static void setDirectory(File newPath) {
+        dChooser.setInitialDirectory(newPath);
+    }
 }

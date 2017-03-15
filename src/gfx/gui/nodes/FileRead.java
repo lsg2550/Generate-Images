@@ -8,7 +8,7 @@ import javafx.scene.text.Text;
  */
 public class FileRead {
 
-    private static Text fileRead = new Text();
+    private static Text fileRead = new Text("");
 
     public static void setText(String message) {
         fileRead.setText(message);

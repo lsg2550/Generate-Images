@@ -1,21 +1,19 @@
 package building;
 
+import building.stages.StageList;
+import building.stages.StageBuilds;
 import gfx.gui.GUI;
 import gfx.gui.nodes.FileRead;
 import gfx.gui.nodes.Progress;
 import gfx.gui.nodes.SelectedDirectory;
-import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import javafx.application.Platform;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import utils.benchmarking.Logging;
@@ -31,22 +29,19 @@ import static utils.operations.io.IO.readImage;
 public class BuildCache {
 
     //UI or CACHE Objects
-    private static VBox toBeGeneratedVBox = new VBox(), centerVBox = new VBox();
-    private static HBox imageViewHBox = new HBox(2.5);
-    private static ScrollPane scrollPane = new ScrollPane(imageViewHBox);
+    private final static VBox GENERATED_VBOX = new VBox(),
+            CENTER_ALL_CONTAINER_VBOX = new VBox();
+    private final static HBox IMAGEVIEW_INSIDE_SCROLLPANE_HBOX = new HBox(2.5);
+    private final static ScrollPane SCROLLPANE_HOLDING_IMAGEVIEW_HBOX = new ScrollPane(IMAGEVIEW_INSIDE_SCROLLPANE_HBOX);
+    private final static Text TO_BE_GENERATED_TEXT = new Text("Image To Be Generated");
     static EnhancedImageView toBeGeneratedIV = new EnhancedImageView();
-
-    //Notifications for any errors that occur during the caching
-    private static AlertBox alertBox = new AlertBox();
 
     public static void chooseFolder() {
         File selectedDirectory = FileSelector.readDirectory();
 
         if (selectedDirectory != null) {
 
-            Runnable task = () -> {
-
-                FileSelector.setDirectory(selectedDirectory.getParentFile());
+            new Thread(() -> {
                 SelectedDirectory.setText(selectedDirectory.getAbsolutePath());
 
                 File[] listOfFiles = selectedDirectory.listFiles((File file, String name)
@@ -65,142 +60,189 @@ public class BuildCache {
                     FileRead.setText("No Images Found!");
                 }
 
-            };
-
-            new Thread(task).start();
+            }).start();
 
         } else {
-            alertBox.show("No Directory Was Selected!");
+            AlertBox.show("No Directory Was Selected!");
         }
     }
 
     private static void splitImagesToRespectiveArrayLists(File[] files) {
         ImageList.clearCache();
-        System.gc();
+        StageList.clearBoxes();
+        String filePath = "",
+                toArrayList = "",
+                fileName = "";
 
-        String fileName;
-        String toArrayList;
-
-        for (int i = 0; i < files.length; i++) { //Goes through each file, puts them into respective arraylist
-            fileName = files[i].getName();
-            toArrayList = FindList.getListDir(fileName);
+        FileRead.setText("Loading File(s)");
+        for (int i = 0; i < files.length; i++) {
+            try {
+                filePath = files[i].toURI().toURL().toExternalForm();
+                fileName = files[i].getName();
+                toArrayList = FindList.getListDir(fileName);
+            } catch (MalformedURLException ex) {
+            }
 
             //Update GUI
-            FileRead.setText("Loading File: " + fileName);
             Progress.setProgress((double) i / files.length);
-
             switch (toArrayList) {
                 case "a":
-                    ImageList.imgA.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgA);
                     break;
                 case "b":
-                    ImageList.imgB.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgB);
                     break;
                 case "c":
-                    ImageList.imgC.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgC);
                     break;
                 case "d":
-                    ImageList.imgD.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgD);
                     break;
                 case "e":
-                    ImageList.imgE.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgE);
                     break;
                 case "f":
-                    ImageList.imgF.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgF);
                     break;
                 case "g":
-                    ImageList.imgG.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgG);
                     break;
                 case "h":
-                    ImageList.imgH.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgH);
                     break;
                 case "i":
-                    ImageList.imgI.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgI);
                     break;
                 case "j":
-                    ImageList.imgJ.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgJ);
                     break;
                 case "k":
-                    ImageList.imgK.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgK);
                     break;
                 case "l":
-                    ImageList.imgL.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgL);
                     break;
                 case "m":
-                    ImageList.imgM.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgM);
                     break;
                 case "n":
-                    ImageList.imgN.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgN);
                     break;
                 case "o":
-                    ImageList.imgO.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgO);
                     break;
                 case "p":
-                    ImageList.imgP.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgP);
                     break;
                 case "q":
-                    ImageList.imgQ.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgQ);
                     break;
                 case "r":
-                    ImageList.imgR.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgR);
                     break;
                 case "s":
-                    ImageList.imgS.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgS);
                     break;
                 case "t":
-                    ImageList.imgT.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgT);
                     break;
                 case "u":
-                    ImageList.imgU.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgU);
                     break;
                 case "v":
-                    ImageList.imgV.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgV);
                     break;
                 case "w":
-                    ImageList.imgW.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgW);
                     break;
                 case "x":
-                    ImageList.imgX.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgX);
                     break;
                 case "y":
-                    ImageList.imgY.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgY);
                     break;
                 case "z":
-                    ImageList.imgZ.add(readImage(files[i]));
+                    readImage(filePath, ImageList.imgZ);
                     break;
                 default:
                     break;
             }
         }
 
-        ImageList.addToCache();
+        filePath = null;
+        toArrayList = null;
+        fileName = null;
     }
 
     private static void displayImagesToBeEdited() {
 
         Platform.runLater(() -> {
-            GUI.getRoot().setCenter(null);
-            toBeGeneratedIV.setImage(null);
-            imageViewHBox.getChildren().clear();
+            IMAGEVIEW_INSIDE_SCROLLPANE_HBOX.getChildren().clear();
         });
 
-        int counter = 0; //Restarting/Starting Counter
-
         //START: HBOX INSIDE SCROLLPANE
-        for (ArrayList<BufferedImage> splitImage : ImageList.splitImgs) {
-            Progress.setProgress((double) counter / 26);
-            FileRead.setText("Building.");
+        FileRead.setText("Building UI");
+        for (ArrayList<Image> splitImage : ImageList.splitImgs) {
+            Progress.setProgress(ImageList.splitImgs.indexOf(splitImage) / 26);
 
             if (!splitImage.isEmpty()) { //Builds New VBox per ImageView
 
+                StageBuilds sb = new StageBuilds(splitImage);
+                StageList.sbAL.add(sb);
+
+                //Updating GUI & Adding VBox to Center HBox
+                Platform.runLater(() -> {
+                    IMAGEVIEW_INSIDE_SCROLLPANE_HBOX.getChildren().add(sb.getRoot());
+                });
+
+            }
+        }//END: HBOX INSIDE SCROLLPANE
+
+        Progress.setProgress(1.0);
+        FileRead.setText("Done!");
+    }
+
+    //Initialize
+    public static void init() {
+        //HBox inside Scrollpane
+        IMAGEVIEW_INSIDE_SCROLLPANE_HBOX.setAlignment(Pos.CENTER);
+        IMAGEVIEW_INSIDE_SCROLLPANE_HBOX.setMaxHeight(5);
+
+        //Scrollpane
+        SCROLLPANE_HOLDING_IMAGEVIEW_HBOX.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        SCROLLPANE_HOLDING_IMAGEVIEW_HBOX.setMinHeight(270);
+        SCROLLPANE_HOLDING_IMAGEVIEW_HBOX.setPannable(true);
+
+        //Image Preview VBox
+        GENERATED_VBOX.getChildren().addAll(TO_BE_GENERATED_TEXT, toBeGeneratedIV);
+        GENERATED_VBOX.setAlignment(Pos.CENTER);
+        GENERATED_VBOX.setMinSize(275, 275);
+
+        //Image Preview
+        Handlers.imageViewStageBuilder(toBeGeneratedIV);
+        toBeGeneratedIV.setFitHeight(235);
+        toBeGeneratedIV.setFitWidth(235);
+
+        //Container for all nodes
+        CENTER_ALL_CONTAINER_VBOX.getChildren().addAll(SCROLLPANE_HOLDING_IMAGEVIEW_HBOX, GENERATED_VBOX);
+        CENTER_ALL_CONTAINER_VBOX.heightProperty().isEqualTo(GUI.getScene().getHeight(), 5);
+        CENTER_ALL_CONTAINER_VBOX.widthProperty().isEqualTo(GUI.getScene().getWidth(), 5);
+        CENTER_ALL_CONTAINER_VBOX.setAlignment(Pos.CENTER);
+
+        //Sets Center
+        GUI.getRoot().setCenter(CENTER_ALL_CONTAINER_VBOX);
+    }
+}
+
+
+/*
                 //UI
                 VBox tempVB = new VBox();
                 tempVB.setAlignment(Pos.CENTER);
 
-                EnhancedImageView eImageView = new EnhancedImageView(SwingFXUtils.toFXImage(splitImage.get(0), null));
+                EnhancedImageView eImageView = new EnhancedImageView(splitImage.get(0));
                 tempVB.getChildren().add(eImageView);
 
-                FileRead.setText("Building..");
                 if (splitImage.size() == 1) {
                     CheckBox enableDisable = new CheckBox();
                     tempVB.getChildren().add(enableDisable);
@@ -210,56 +252,11 @@ public class BuildCache {
                     Handlers.imageViewListener(eImageView);
                 } else {
                     Button extend = new Button("Extend");
+                    Insets insets = new Insets(0, 5, 0, 5);
+                    extend.setPadding(insets);
                     extend.setMinHeight(16);
-                    extend.setPadding(new Insets(0, 5, 0, 5));
                     tempVB.getChildren().add(extend);
 
                     //Handlers
                     Handlers.extendAndCreateSubMenu(splitImage, eImageView, extend);
-                }
-
-                FileRead.setText("Building...");
-
-                //Updating GUI & Adding VBox to Center HBox
-                Platform.runLater(() -> {
-                    imageViewHBox.getChildren().add(tempVB);
-                });
-            }
-            counter++;
-        }//END: HBOX INSIDE SCROLLPANE
-
-        Platform.runLater(() -> { //Updates CENTER VBOX
-            GUI.getRoot().setCenter(centerVBox);
-            Progress.setProgress(1.0);
-            FileRead.setText("Done!");
-        });
-
-    }
-
-    //Initialize
-    public static void init() {
-        //HBox inside Scrollpane
-        imageViewHBox.setMaxHeight(5);
-        imageViewHBox.setAlignment(Pos.CENTER);
-
-        //Scrollpane
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setMinHeight(270);
-        scrollPane.setPannable(true);
-
-        //Image Preview VBox
-        toBeGeneratedVBox.getChildren().addAll(new Text("Image To Be Generated"), toBeGeneratedIV);
-        toBeGeneratedVBox.setMinSize(250, 250);
-        toBeGeneratedVBox.setAlignment(Pos.CENTER);
-        VBox.setVgrow(toBeGeneratedVBox, Priority.ALWAYS);
-
-        //Image Preview
-        toBeGeneratedIV.setFitHeight(235);
-        toBeGeneratedIV.setFitHeight(235);
-        Handlers.imageViewStageBuilder(toBeGeneratedIV);
-
-        //Container for all nodes
-        centerVBox.getChildren().addAll(scrollPane, toBeGeneratedVBox);
-        centerVBox.setAlignment(Pos.CENTER);
-    }
-}
+                }*/

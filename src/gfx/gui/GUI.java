@@ -10,6 +10,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import building.BuildCache;
+import building.Handlers;
+import building.ImageList;
 import com.sun.javafx.css.StyleManager;
 import gfx.gui.nodes.FileRead;
 import gfx.gui.nodes.Progress;
@@ -34,13 +36,13 @@ public class GUI {
     private static Scene scene = new Scene(root, 800, 600);
     private static Stage stage = new Stage();
 
-    //Notifications
-    private static AlertBox aBox = new AlertBox();
-
     public GUI() {
         mainStage();
         BuildCache.init();
         FileSelector.init();
+        Handlers.init();
+        AlertBox.init();
+        ImageList.init();
     }
 
     private void mainStage() {
@@ -52,6 +54,7 @@ public class GUI {
         MenuBar menuBar = new MenuBar();
         Menu file = new Menu("File"),
                 help = new Menu("Help"),
+                opts = new Menu("Operations"),
                 benchmarking = new Menu("Benchmarking"),
                 themeSelect = new Menu("Select Theme");
         MenuItem folderSelect = new MenuItem("Open"),
@@ -60,13 +63,16 @@ public class GUI {
                 about = new MenuItem("About"),
                 themeOne = new MenuItem("Persian"),
                 themeTwo = new MenuItem("Rainy Day"),
+                themeThree = new MenuItem("Sand"),
                 memoryUsage = new MenuItem("Memory Usage"),
-                timeBenchmark = new MenuItem("Run Time"); //end Help Menu
-        menuBar.getMenus().addAll(file, help);
+                timeBenchmark = new MenuItem("Run Time"), //end Help Menu
+                clearAll = new MenuItem("Clear All Choices"); //end Operations Menu
+        menuBar.getMenus().addAll(file, opts, help);
         file.getItems().addAll(folderSelect, generateImage, new SeparatorMenuItem(), exit);
+        opts.getItems().add(clearAll);
         help.getItems().addAll(about, themeSelect, benchmarking);
         benchmarking.getItems().addAll(memoryUsage, timeBenchmark);
-        themeSelect.getItems().addAll(themeOne, themeTwo);
+        themeSelect.getItems().addAll(themeOne, themeTwo, themeThree);
         generateImage.setDisable(true);
 
         //HBoxes
@@ -85,12 +91,14 @@ public class GUI {
             try {
                 IO.writeFile();
             } catch (NullPointerException ex) {
-                aBox.show("Image Was Not Saved!");
-                //ex.printStackTrace();
+                AlertBox.show("Image Was Not Saved!");
             }
         });
         exit.setOnAction(e -> {
             stage.close();
+        });
+        clearAll.setOnAction(e -> {
+            ImageList.clearAll();
         });
         about.setOnAction(e -> {
 
@@ -106,6 +114,9 @@ public class GUI {
         });
         themeTwo.setOnAction(e -> {
             SetStyles.changeStyle(Styles.rainyDay);
+        });
+        themeThree.setOnAction(e -> {
+            SetStyles.changeStyle(Styles.sand);
         });
 
         //BorderPane

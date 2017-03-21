@@ -4,7 +4,7 @@ package gfx.gui;
  *
  * @author Luis
  */
-public class ReadMe {
+public class Readme {
 
     /*Soon to read te readme and place text into a new stage*/
 }

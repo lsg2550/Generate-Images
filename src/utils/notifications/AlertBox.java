@@ -17,18 +17,14 @@ import javafx.stage.Stage;
 public class AlertBox {
 
     //UI
-    private Stage stage = new Stage();
-    private VBox vb = new VBox(10);
+    private static Stage stage = new Stage();
 
     //Message
-    private Text message = new Text("");
+    private static Text message = new Text("");
 
-    public AlertBox() {
-        buildStage();
-    }
-
-    private void buildStage() {
+    public static void init() {
         //UI
+        VBox vb = new VBox(10);
         Button ok = new Button("OK");
         Scene scene = new Scene(vb, 200, 100);
 
@@ -50,8 +46,8 @@ public class AlertBox {
         stage.initOwner(GUI.getScene().getWindow());
     }
 
-    public void show(String message) {
-        this.message.setText(message);
+    public static void show(String alertMessage) {
+        message.setText(alertMessage);
         stage.show();
     }
 }

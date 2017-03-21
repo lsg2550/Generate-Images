@@ -1,10 +1,8 @@
 package utils.operations.io;
 
 import java.io.File;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import building.BuildCache;
 
 /**
  *
@@ -19,7 +17,7 @@ public class FileSelector {
     static FileChooser filechooser = new FileChooser();
 
     //File
-    static File saveFile;
+    static File saveFile, selectedDirectory;
 
     public static void init() {
         filechooser.setTitle("Save Image");
@@ -30,16 +28,21 @@ public class FileSelector {
     }
 
     public static File readDirectory() {
-        File selectedDirectory = dChooser.showDialog(null);
+        selectedDirectory = dChooser.showDialog(null);
 
         if (selectedDirectory != null) { //Directory was Selected
+            setOpenDirectory();
             return selectedDirectory;
         } else {
             return null;
         }
     }
 
-    public static void setDirectory(File newPath) {
-        dChooser.setInitialDirectory(newPath);
+    public static void setOpenDirectory() {
+        dChooser.setInitialDirectory(selectedDirectory.getParentFile());
+    }
+
+    public static void setSaveDirectory() {
+        filechooser.setInitialDirectory(saveFile.getParentFile());
     }
 }

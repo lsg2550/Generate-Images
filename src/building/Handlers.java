@@ -4,11 +4,9 @@ import assets.ico.Icon;
 import gfx.gui.GUI;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
@@ -18,147 +16,144 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import static building.ImageList.toGeneratedIV;
+import building.stages.StageBuilds;
+import building.stages.StageList;
+import javafx.scene.image.Image;
+import utils.operations.enhancednodes.EnhancedButton;
 import utils.operations.enhancednodes.EnhancedImageView;
+import utils.operations.io.IO;
 
 /**
  *
  * @author Luis
  */
-class Handlers {
+public class Handlers {
+
+    private static Stage stage = new Stage();
+
+    public static void init() {
+        stage.getIcons().add(Icon.ICON);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(GUI.getScene().getWindow());
+        stage.setOnCloseRequest(e -> {
+            stage.setScene(null);
+        });
+    }
 
     //SetOnAction for Buttons
-    static void extendAndCreateSubMenu(ArrayList<BufferedImage> arrayOfImageSet, EnhancedImageView imageView, Button extend) {
+    public static void extendAndCreateSubMenu(ArrayList<Image> arrayOfImageSet, EnhancedImageView imageView, EnhancedButton extend) {
         new Thread(() -> {
 
-            //UI
-            HBox hb = new HBox();
-            hb.setMaxHeight(5);
-            hb.setAlignment(Pos.CENTER);
-
-            arrayOfImageSet.forEach((bufferedImage) -> {
-                //UI
-                VBox tempVB = new VBox();
-                CheckBox enableDisable = new CheckBox();
-
-                //Details
-                EnhancedImageView innerImageView = new EnhancedImageView(SwingFXUtils.toFXImage(bufferedImage, null));
-                innerImageView.setFitWidth(250);
-                innerImageView.setFitHeight(250);
-                tempVB.getChildren().addAll(innerImageView, enableDisable);
-                tempVB.setAlignment(Pos.CENTER);
-
-                //Handlers
-                Handlers.enableDisable(innerImageView, enableDisable);
-                Handlers.imageViewListener(innerImageView);
-
-                //Adding to HBox
-                hb.getChildren().add(tempVB);
-            });
-
+            //SP
             ScrollPane sp = new ScrollPane();
             sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            sp.setFitToHeight(true);
+            sp.setFitToWidth(true);
             sp.setPannable(true);
-            sp.setContent(hb);
 
+            //HBox
+            HBox hb = new HBox();
+            hb.setAlignment(Pos.CENTER);
+
+            //Scene
             Scene scene = new Scene(sp, 600, 275);
 
-            Platform.runLater(() -> {
+            //Binding
+            sp.setContent(hb);
+            sp.prefHeightProperty().bind(scene.heightProperty());
+            sp.prefWidthProperty().bind(scene.widthProperty());
 
-                Stage stage = new Stage();
-                stage.getIcons().add(Icon.ICON);
-                stage.initModality(Modality.WINDOW_MODAL);
-                stage.initOwner(GUI.getScene().getWindow());
-                stage.setResizable(false);
+            for (Image image : arrayOfImageSet) {
+                StageBuilds sb = new StageBuilds(image);
+                StageList.sbAL.add(sb);
+                hb.getChildren().add(sb.getRoot());
+            }
+
+            extend.setOnAction(e -> {
                 stage.setScene(scene);
-
-                extend.setOnMouseClicked(e -> {
-                    stage.show();
-                });
-
+                stage.show();
             });
 
         }).start();
+    }
+
+    //SetOnAction for the Checkbox
+    //When the user uses the Clear All option from the operations menu, this will clear
+    //all images and reset the checkboxes
+    public static void enableDisable(EnhancedImageView eImageView, CheckBox enableDisable) {
+
+        /*
+        ListChangeListener lcl = new WeakListChangeListener(e -> {
+            if (ImageList.outputImagesOL.isEmpty()) {
+                enableDisable.setSelected(true);
+            }
+        });
+        ImageList.outputImagesOL.addListener(lcl);
+         */
+        enableDisable.selectedProperty().addListener(e -> {
+            if (enableDisable.isSelected()) {
+                ImageList.outputImagesOL.remove(eImageView);
+                eImageView.applyGrayscale();
+            } else {
+                ImageList.outputImagesOL.add(eImageView);
+                eImageView.removeEffect();
+            }
+        });
+
+        enableDisable.setSelected(true);
+    }
+
+    //When the user enables/disables an imageview this method will be called to 
+    //update the "To Be Generated" image
+    public static void imageViewListener(EnhancedImageView eImageView) {
+        eImageView.effectProperty().addListener(e -> {
+            liveImageBuilding();
+        });
     }
 
     //When the user clicks on the ImageToBeGenerated a new window will open
     //to allow the user to clearly see the image
     static void imageViewStageBuilder(EnhancedImageView eImageView) {
-        new Thread(() -> {
+        ImageView imageV = new ImageView();
 
-            ImageView imageV = new ImageView();
+        StackPane sp = new StackPane();
+        sp.getChildren().add(imageV);
+        sp.setAlignment(Pos.CENTER);
 
-            StackPane sp = new StackPane();
-            sp.getChildren().add(imageV);
-            sp.setAlignment(Pos.CENTER);
+        Scene scene = new Scene(sp, 800, 600);
 
-            Scene scene = new Scene(sp, 800, 600);
-
-            Platform.runLater(() -> {
-                Stage stage = new Stage();
-                stage.getIcons().add(Icon.ICON);
-                stage.initModality(Modality.WINDOW_MODAL);
-                stage.initOwner(GUI.getScene().getWindow());
-                stage.setScene(scene);
-
-                eImageView.setOnMouseClicked(e -> {
-                    imageV.setImage(eImageView.getImage());
-                    stage.show();
-                });
-            });
-
-        }).start();
-
-    }
-
-    //SetOnAction for the Checkbox
-    static void enableDisable(EnhancedImageView eImageView, CheckBox enableDisable) {
-        new Thread(() -> {
-
-            enableDisable.selectedProperty().addListener(e -> {
-
-                if (enableDisable.isSelected()) {
-
-                    ImageList.outputImages.remove(eImageView);
-                    ImageList.outputImages.trimToSize();
-                    eImageView.applyGrayscale();
-
-                } else {
-
-                    ImageList.outputImages.add(eImageView);
-                    eImageView.removeEffect();
-
-                }
-
-            });
-
-            enableDisable.setSelected(true);
-
-        }).start();
-    }
-
-    //When the user enables/disables an imageview this method will be called to 
-    //update the "To Be Generated" image
-    static void imageViewListener(EnhancedImageView eImageView) {
-        eImageView.effectProperty().addListener(e -> {
-            liveImageBuilding();
+        eImageView.setOnMouseClicked(e -> {
+            imageV.setImage(eImageView.getImage());
+            stage.setScene(scene);
+            stage.show();
         });
     }
 
     //This method is called whenever there is a change in the ImageViews in the
     //program. e.g. When they're enabled or disabled
     static void liveImageBuilding() {
-        new Thread(() -> {
+        toGeneratedIV.clear();
 
-            toGeneratedIV.clear();
+        ImageList.outputImagesOL.forEach((eImageView) -> {
+            Image imageViewImg = eImageView.getImage();
 
-            ImageList.outputImages.forEach((eImageView) -> {
-                toGeneratedIV.add(SwingFXUtils.fromFXImage(eImageView.getImage(), null));
-            });
+            BufferedImage bufferedImageImg = SwingFXUtils.fromFXImage(imageViewImg, null);
+            toGeneratedIV.add(bufferedImageImg);
 
-            BufferedImage genImg = BuildImage.buildImageLive(toGeneratedIV);
-            GeneratedImage.setGeneratedImage(genImg);
-            BuildCache.toBeGeneratedIV.setImage(SwingFXUtils.toFXImage(genImg, null));
+            //CleanUp
+            bufferedImageImg.flush();
+            bufferedImageImg = null;
+            imageViewImg = null;
+        });
 
-        }).start();
+        BufferedImage genImg = BuildImage.buildImageLive(toGeneratedIV);
+        IO.bI = genImg;
+        Image fxImg = SwingFXUtils.toFXImage(genImg, null);
+        BuildCache.toBeGeneratedIV.setImage(fxImg);
+
+        //CleanUp
+        genImg.flush();
+        genImg = null;
+        fxImg = null;
     }
 }

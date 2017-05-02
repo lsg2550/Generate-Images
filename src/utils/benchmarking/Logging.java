@@ -8,19 +8,15 @@ public class Logging {
 
     private static long startTime, endTime;
 
-    public static void setStartTime(long aStartTime) {
-        startTime = aStartTime;
+    public static void setStartTime() {
+        startTime = System.currentTimeMillis();
     }
 
-    public static void setEndTime(long aEndTime) {
-        endTime = aEndTime;
+    public static void setEndTime() {
+        endTime = System.currentTimeMillis();
     }
 
-    public static long benchmarkTimeInMilli() {
+    public static long benchmarkTime() {
         return endTime - startTime;
-    }
-
-    public static long benchmarkTimeInSeconds() {
-        return (endTime - startTime) / 1000;
     }
 }

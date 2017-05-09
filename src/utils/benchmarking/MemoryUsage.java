@@ -6,12 +6,12 @@ package utils.benchmarking;
  */
 public class MemoryUsage {
 
-    public static long memoryUsage() {
+    public static long memoryUsageInBytes() {
         return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
     }
 
     public static long memoryUsageInKBytes() {
-        return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024;
+        return memoryUsageInBytes() / 1024;
     }
 
     public static long memoryUsageInMBytes() {

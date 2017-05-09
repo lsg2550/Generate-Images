@@ -1,7 +1,6 @@
 package cache;
 
-import gui.CenterDisplay;
-import gui.PopDisplay;
+import gui.DisplayWindow;
 import java.util.ArrayList;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,25 +22,21 @@ import javafx.scene.layout.VBox;
  *
  * @author Luis
  */
-/**
- * ACTS AS ONE BOX
- */
-public class CacheType {
+class CacheBuild {
 
-    private ArrayList<Image> arrayListOfImages = new ArrayList(150);
+    private ArrayList<Image> arrayListOfImages;
     private char arrayListIdentifier;
     private VBox root = new VBox();
 
-    private CacheType(Image image) { //For the submenu
-        arrayListOfImages.add(image);
-    }
+    protected CacheBuild(char arrayListIdentifier, Image image) {
+        //System.out.println("Identifier: " + arrayListIdentifier); //Logging
 
-    public CacheType(char arrayListIdentifier, Image image) { //Start CacheType with its identifier and initial image
         this.arrayListIdentifier = arrayListIdentifier;
+        arrayListOfImages = new ArrayList<>(150);
         arrayListOfImages.add(image);
     }
 
-    public void buildCacheType() {
+    protected void buildCacheType() {
         //ImageView
         ImageView imageView = new ImageView(arrayListOfImages.get(0));
         imageView.setFitWidth(250);
@@ -66,20 +61,38 @@ public class CacheType {
         nullImages();
     }
 
+    private CacheBuild(Image image) { //For the submenu
+        buildForSingleImage(image);
+    }
+
+    private void buildForSingleImage(Image image) {
+        //ImageView
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(250);
+        imageView.setFitHeight(250);
+
+        //CheckBox
+        CheckBox enableDisable = new CheckBox();
+        enableDisable(imageView, enableDisable);
+
+        root.getChildren().addAll(imageView, enableDisable);
+        root.setAlignment(Pos.CENTER);
+    }
+
     //Listeners
     private void enableDisable(ImageView imageView, CheckBox enableDisable) {
         ChangeListener changeListenerForCheckBox = (ChangeListener) (ObservableValue observable, Object oldValue, Object newValue) -> {
             ColorAdjust toGray = new ColorAdjust(1.0, -0.75, 0.0, -0.5);
 
             if (enableDisable.isSelected()) {
-                SelectedImageList.selectedImages.remove(imageView);
+                DrawPreview.remove(imageView);
                 imageView.setEffect(toGray);
             } else {
-                SelectedImageList.selectedImages.add(imageView);
+                DrawPreview.add(imageView);
                 imageView.setEffect(null);
             }
 
-            SelectedImageList.draw();
+            DrawPreview.draw();
         };
 
         enableDisable.selectedProperty().addListener(changeListenerForCheckBox);
@@ -105,39 +118,40 @@ public class CacheType {
         sp.setContent(hb);
 
         for (Image image : arrayOfImageSet) {
-            CacheType ct = new CacheType(image);
-            ct.buildCacheType();
-            hb.getChildren().add(ct.getRoot());
+            hb.getChildren().add(new CacheBuild(image).getRoot());
         }
 
         EventHandler eh = (EventHandler) (Event event) -> {
-            PopDisplay.EXTRA_DISPLAY.setScene(scene);
-            PopDisplay.EXTRA_DISPLAY.show();
+            DisplayWindow.setScene(scene);
+            DisplayWindow.show();
         };
 
         extend.setOnAction(eh);
     }
 
     //Garbage Collection Purposes
-    private void nullImages() { //Due to JavaFX's poor garbage collection of image objects, I am forced to null the image objects manually
+    private void nullImages() {
+        //System.out.println("Arraylist Size: " + arrayListOfImages.size()
+        //        + ". Arraylist Identifier: " + arrayListIdentifier); //Logging
+
         arrayListOfImages.stream().forEach((image) -> {
             image = null;
         });
-        arrayListOfImages.clear();
         arrayListOfImages.trimToSize();
+        arrayListOfImages.clear();
         arrayListOfImages = null;
     }
 
     //Accessors
-    public VBox getRoot() {
+    protected VBox getRoot() {
         return root;
     }
 
-    public char getIdentifier() {
+    protected char getIdentifier() {
         return arrayListIdentifier;
     }
 
-    public ArrayList<Image> getArrayListOfImages() {
+    protected ArrayList<Image> getArrayListOfImages() {
         return arrayListOfImages;
     }
 }

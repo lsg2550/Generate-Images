@@ -13,7 +13,7 @@
     -fx-border-radius: 4;
     -fx-background-radius: 4;
     -fx-background-color: #1c5125;
-    -fx-text-fill: whitesmoke;
+    -fx-text-fill: black;
 }
 
 .progress-bar{

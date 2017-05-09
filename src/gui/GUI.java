@@ -1,7 +1,7 @@
 package gui;
 
-import cache.BuildCache;
-import com.sun.javafx.css.StyleManager;
+import assets.icon.Icon;
+import cache.Cache;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -17,7 +17,7 @@ import utils.io.IO;
  */
 public class GUI {
 
-    private BuildCache buildCache = new BuildCache();
+    private Cache buildCache = new Cache();
     private Stage primaryStage;
 
     GUI(Stage primaryStage) {
@@ -29,28 +29,31 @@ public class GUI {
         //Menu
         MenuBar menuBar = new MenuBar();
         Menu file = new Menu("File");
-        MenuItem open = new MenuItem("Open"),
-                save = new MenuItem("Save"),
-                exit = new MenuItem("Exit");
-        menuBar.getMenus().add(file);
+        MenuItem open = new MenuItem("Open"), save = new MenuItem("Save"), exit = new MenuItem("Exit");
+
+        //Menu Children
+        menuBar.getMenus().addAll(file, DisplayHelp.help, DisplayText.directoryText);
         file.getItems().addAll(open, save, new SeparatorMenuItem(), exit);
 
         //UI
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(menuBar);
-        borderPane.setCenter(CenterDisplay.CENTER_ALL_CONTAINER_VBOX);
+        borderPane.setCenter(DisplayCenter.CENTER_ALL_CONTAINER_VBOX);
+        borderPane.setBottom(DisplayBottom.hb);
 
+        //Scene & Stage
         Scene scene = new Scene(borderPane, 800, 600);
+        primaryStage.getIcons().add(Icon.ICON);
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        scene.getStylesheets().add("assets/persian.css");
-        StyleManager.getInstance().addUserAgentStylesheet("assets/persian.css");
-
+        //Handlers
         open.setOnAction(e -> {
             buildCache.selectFolder(IO.readDirectoryListOfFiles());
         });
         save.setOnAction(e -> {
+            //DisplaySave.show(); //Window to display chosen images where user will be able to re-arrange order etc before writing image
             IO.saveFile();
         });
         exit.setOnAction(e -> {

@@ -1,6 +1,9 @@
 package cache;
 
-import gui.CenterDisplay;
+import gui.DisplayCenterScrollPane;
+import gui.DisplayPreviewImageView;
+import gui.DisplayText;
+import gui.DisplayProgressBar;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -12,36 +15,42 @@ import utils.benchmarking.MemoryUsage;
  *
  * @author Luis
  */
-public class BuildCache {
+public class Cache {
 
-    private final char[] ENGLISH_ALPHABET = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+    private static final char[] ENGLISH_ALPHABET = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
         'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
         'x', 'y', 'z'};
-    private final ArrayList<CacheType> CACHE_LIST = new ArrayList(26);
+    private static final ArrayList<CacheBuild> CACHE_LIST = new ArrayList<CacheBuild>(26);
 
     public void selectFolder(File[] selectedDirectory) {
         if (selectedDirectory != null) {
             new Thread(() -> {
-                grab(selectedDirectory);
-                build();
+                cleanup();
+                processAndBuild(selectedDirectory);
 
-                logging();
-                return;
+                System.out.println("Memory Used: " + MemoryUsage.memoryUsageInMBytes() + "MB");
             }).start();
         }
+
+        DisplayText.setUpdateText("No Directory Was Selected or the Current Directory is Already Selected!");
     }
 
-    private void grab(File[] selectedDirectory) {
+    private void processAndBuild(File[] selectedDirectory) {
+        /*Processes*/
         boolean cacheTypeAlreadyExists = false; //False = cacheType doesn't exist; True = cacheType exists
+        DisplayText.setUpdateText("Loading Images...");
+        double counter = 0.0;
         String filePath;
-        cleanup();
 
         for (File file : selectedDirectory) {
+            DisplayProgressBar.setProgress(counter / (double) selectedDirectory.length);
+            counter++;
+
             try {
                 filePath = file.toURI().toURL().toExternalForm();
-                System.out.println("File Read: " + filePath); //Logging
+                //System.out.println("File Read: " + filePath); //Logging
 
-                for (CacheType cacheType : CACHE_LIST) {
+                for (CacheBuild cacheType : CACHE_LIST) {
                     if (cacheType.getIdentifier() == getListDir(file.getName())) {
                         cacheType.getArrayListOfImages().add(new Image(filePath));
                         cacheTypeAlreadyExists = true;
@@ -50,26 +59,33 @@ public class BuildCache {
                 }
 
                 if (!cacheTypeAlreadyExists) {
-                    CACHE_LIST.add(new CacheType(getListDir(file.getName()), new Image(filePath)));
+                    CACHE_LIST.add(new CacheBuild(getListDir(file.getName()), new Image(filePath)));
                 }
 
-                cacheTypeAlreadyExists = false; //Resets
+                cacheTypeAlreadyExists = false; //Resets boolean
             } catch (MalformedURLException ex) {
             }
         }
-    }
 
-    private void build() {
+        try {
+            DisplayText.setUpdateText("Building...");
+            Thread.sleep(200);
+        } catch (InterruptedException ex) {
+        }
+
+        /*Builds*/
         CACHE_LIST.stream().forEach((cacheType) -> {
-            System.out.println("CacheList contents: " + cacheType.getIdentifier()
-                    + "\nSize of CacheType: " + cacheType.getArrayListOfImages().size()); //Logging
 
-            //Building
             cacheType.buildCacheType();
+
             Platform.runLater(() -> {
-                CenterDisplay.IMAGEVIEWS_INSIDE_SCROLLPANE_HBOX.getChildren().add(cacheType.getRoot());
+                DisplayCenterScrollPane.addToHBox(cacheType.getRoot());
             });
+
         });
+
+        DisplayProgressBar.setProgress(1);
+        DisplayText.setUpdateText("Done!");
     }
 
     private char getListDir(String fileName) {
@@ -78,7 +94,6 @@ public class BuildCache {
         for (char letter : ENGLISH_ALPHABET) {
             for (int i = fileName.length() - 1; i >= 0; i--) {
                 if (fileName.charAt(i) == letter) {
-                    //System.out.println("Character Found: " + letter + ".\nFor filename: " + fileName); //Logging
                     return letter;
                 }
             }
@@ -89,14 +104,11 @@ public class BuildCache {
 
     private void cleanup() {
         Platform.runLater(() -> {
-            CenterDisplay.IMAGEVIEWS_INSIDE_SCROLLPANE_HBOX.getChildren().clear();
+            DisplayPreviewImageView.setImageForImageView(null);
+            DisplayCenterScrollPane.clearHBox();
         });
-        SelectedImageList.selectedImages.clear();
-        CACHE_LIST.clear();
-    }
 
-    private void logging() {
-        System.out.println("Size of CacheList: " + CACHE_LIST.size());
-        System.out.println("Memory Used in MB: " + MemoryUsage.memoryUsageInMBytes() + "MB");
+        DrawPreview.clear();
+        CACHE_LIST.clear();
     }
 }

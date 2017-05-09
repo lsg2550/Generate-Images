@@ -1,5 +1,6 @@
 package gui;
 
+import assets.css.CSS;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import utils.io.IO;
@@ -13,8 +14,14 @@ public class Launcher extends Application {
     @Override
     public void start(Stage primaryStage) {
         GUI gui = new GUI(primaryStage);
-        PopDisplay.init();
-        CenterDisplay.init();
+        CSS.init(primaryStage.getScene());
+        DisplayWindow.init();
+        DisplayBottom.init();
+        DisplayCenter.init();
+        DisplaySave.init();
+        DisplayHelp.init();
+        DisplayCenterScrollPane.init();
+        DisplayPreviewImageView.init();
         IO.init();
     }
 

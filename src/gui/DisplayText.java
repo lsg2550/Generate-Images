@@ -1,9 +1,7 @@
 package gui;
 
-import java.io.IOException;
 import javafx.scene.control.Menu;
 import javafx.scene.text.Text;
-import utils.os.OS;
 
 /**
  *

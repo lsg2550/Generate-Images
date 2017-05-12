@@ -20,7 +20,7 @@ public class DisplayCenter {
     //Initialize
     protected static void init() {
         //Image Preview VBox
-        GENERATED_VBOX.getChildren().addAll(new Text("Image To Be Generated"), DisplayPreviewImageView.toBeGeneratedIV);
+        GENERATED_VBOX.getChildren().addAll(new Text("Image To Be Generated"), DisplayPreviewImageView.PREVIEW_IMAGEVIEW);
         GENERATED_VBOX.setAlignment(Pos.CENTER);
         GENERATED_VBOX.setMinSize(250, 250);
 

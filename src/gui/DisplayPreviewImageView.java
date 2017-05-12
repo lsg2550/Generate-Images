@@ -9,22 +9,22 @@ import javafx.scene.image.ImageView;
  */
 public class DisplayPreviewImageView {
 
-    protected final static ImageView toBeGeneratedIV = new ImageView();
+    protected final static ImageView PREVIEW_IMAGEVIEW = new ImageView();
 
     protected static void init() {
-        toBeGeneratedIV.setFitHeight(235);
-        toBeGeneratedIV.setFitWidth(235);
+        PREVIEW_IMAGEVIEW.setFitHeight(235);
+        PREVIEW_IMAGEVIEW.setFitWidth(235);
     }
 
     public static boolean containsImage() {
-        return toBeGeneratedIV.getImage() != null; //True, contains image; False, does not contain image
+        return PREVIEW_IMAGEVIEW.getImage() != null; //True, contains image; False, does not contain image
     }
 
     public static Image getImageFromImageView() {
-        return toBeGeneratedIV.getImage();
+        return PREVIEW_IMAGEVIEW.getImage();
     }
 
     public static void setImageForImageView(Image image) {
-        toBeGeneratedIV.setImage(image);
+        PREVIEW_IMAGEVIEW.setImage(image);
     }
 }

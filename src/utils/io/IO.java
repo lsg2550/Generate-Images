@@ -16,24 +16,24 @@ import javax.imageio.ImageIO;
 public class IO {
 
     //Selecting Directory & Saving File
-    private static DirectoryChooser dChooser = new DirectoryChooser();
-    private static FileChooser filechooser = new FileChooser();
+    private static final DirectoryChooser DIRECTORY_CHOOSER = new DirectoryChooser();
+    private static final FileChooser FILE_CHOOSER = new FileChooser();
 
     public static void init() {
-        filechooser.setTitle("Save Image");
-        filechooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        filechooser.getExtensionFilters().addAll(
+        FILE_CHOOSER.setTitle("Save Image");
+        FILE_CHOOSER.setInitialDirectory(new File(System.getProperty("user.home")));
+        FILE_CHOOSER.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("JPG", "*.jpg"),
                 new FileChooser.ExtensionFilter("PNG", "*.png")
         );
     }
 
     public static File[] readDirectoryListOfFiles() {
-        File selectedDirectory = dChooser.showDialog(null);
+        File selectedDirectory = DIRECTORY_CHOOSER.showDialog(null);
         File[] selectedDirectoryFiles = null;
 
         if (selectedDirectory != null && !selectedDirectory.getAbsolutePath().equals(DisplayText.getDirectoryText())) { //Directory was Selected
-            dChooser.setInitialDirectory(selectedDirectory.getParentFile());
+            DIRECTORY_CHOOSER.setInitialDirectory(selectedDirectory.getParentFile());
             DisplayText.setDirectoryText(selectedDirectory.getAbsolutePath());
 
             selectedDirectoryFiles = selectedDirectory.listFiles((File file, String name)
@@ -47,10 +47,10 @@ public class IO {
 
     public static void saveFile() {
         try {
-            File saveFile = filechooser.showSaveDialog(null);
+            File saveFile = FILE_CHOOSER.showSaveDialog(null);
 
             if (saveFile != null) {
-                filechooser.setInitialDirectory(saveFile.getParentFile());
+                FILE_CHOOSER.setInitialDirectory(saveFile.getParentFile());
                 ImageIO.write(SwingFXUtils.fromFXImage(DisplayPreviewImageView.getImageFromImageView(), null),
                         saveFile.toString().substring(saveFile.toString().length() - 3),
                         saveFile

@@ -21,9 +21,9 @@ public class DrawPreview {
             Canvas CV = new Canvas(SELECTED_IMAGES.get(0).getImage().getWidth(), SELECTED_IMAGES.get(0).getImage().getHeight());
             GraphicsContext GC = CV.getGraphicsContext2D();
 
-            for (ImageView selectedImage : SELECTED_IMAGES) {
+            SELECTED_IMAGES.forEach((selectedImage) -> {
                 GC.drawImage(selectedImage.getImage(), 0, 0);
-            }
+            });
 
             SnapshotParameters sp = new SnapshotParameters();
             sp.setFill(Color.TRANSPARENT);

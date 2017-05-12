@@ -24,6 +24,8 @@ public class Cache {
 
     public void selectFolder(File[] selectedDirectory) {
         if (selectedDirectory != null) {
+            DisplayText.setUpdateText("Loading Images...");
+
             new Thread(() -> {
                 cleanup();
                 processAndBuild(selectedDirectory);
@@ -38,7 +40,6 @@ public class Cache {
     private void processAndBuild(File[] selectedDirectory) {
         /*Processes*/
         boolean cacheTypeAlreadyExists = false; //False = cacheType doesn't exist; True = cacheType exists
-        DisplayText.setUpdateText("Loading Images...");
         double counter = 0.0;
         String filePath;
 
@@ -68,7 +69,6 @@ public class Cache {
         }
 
         try {
-            DisplayText.setUpdateText("Building...");
             Thread.sleep(200);
         } catch (InterruptedException ex) {
         }
@@ -84,8 +84,10 @@ public class Cache {
 
         });
 
-        DisplayProgressBar.setProgress(1);
-        DisplayText.setUpdateText("Done!");
+        Platform.runLater(() -> {
+            DisplayProgressBar.setProgress(1);
+            DisplayText.setUpdateText("Done!");
+        });
     }
 
     private char getListDir(String fileName) {

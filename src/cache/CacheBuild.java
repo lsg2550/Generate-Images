@@ -117,9 +117,9 @@ class CacheBuild {
         //Binding
         sp.setContent(hb);
 
-        for (Image image : arrayOfImageSet) {
+        arrayOfImageSet.forEach((image) -> {
             hb.getChildren().add(new CacheBuild(image).getRoot());
-        }
+        });
 
         EventHandler eh = (EventHandler) (Event event) -> {
             DisplayWindow.setScene(scene);

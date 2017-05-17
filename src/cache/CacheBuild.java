@@ -1,7 +1,11 @@
 package cache;
 
 import gui.DisplayWindow;
+import java.io.File;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -25,13 +29,25 @@ import javafx.scene.layout.VBox;
 class CacheBuild {
 
     private ArrayList<Image> arrayListOfImages;
-    private char arrayListIdentifier;
+    private char arrayListCharIdentifier;
     private VBox root = new VBox();
 
-    protected CacheBuild(char arrayListIdentifier, Image image) {
-        //System.out.println("Identifier: " + arrayListIdentifier); //Logging
+    protected CacheBuild(File[] listOfImages) {
+        arrayListOfImages = new ArrayList<>(listOfImages.length);
 
-        this.arrayListIdentifier = arrayListIdentifier;
+        //Because we sanitized forimages during the IO process, we know that this won't be an issue
+        for (File image : listOfImages) {
+            try {
+                arrayListOfImages.add(new Image(image.toURI().toURL().toExternalForm()));
+            } catch (MalformedURLException ex) {
+            }
+        }
+    }
+
+    protected CacheBuild(char arrayListCharIdentifier, Image image) {
+        //System.out.println("Identifier: " + arrayListCharIdentifier); //Logging
+
+        this.arrayListCharIdentifier = arrayListCharIdentifier;
         arrayListOfImages = new ArrayList<>(150);
         arrayListOfImages.add(image);
     }
@@ -147,11 +163,12 @@ class CacheBuild {
         return root;
     }
 
-    protected char getIdentifier() {
-        return arrayListIdentifier;
+    protected char getArrayListCharIdentifier() {
+        return arrayListCharIdentifier;
     }
 
     protected ArrayList<Image> getArrayListOfImages() {
         return arrayListOfImages;
     }
+
 }

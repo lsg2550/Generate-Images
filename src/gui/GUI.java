@@ -1,12 +1,15 @@
 package gui;
 
 import assets.icon.Icon;
-import cache.Cache;
+import cache.CacheMultiple;
+import cache.CacheSingle;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import utils.io.IO;
@@ -17,7 +20,8 @@ import utils.io.IO;
  */
 public class GUI {
 
-    private Cache buildCache = new Cache();
+    private CacheSingle singleCache = new CacheSingle();
+    private CacheMultiple multiCache = new CacheMultiple();
     private Stage primaryStage;
 
     GUI(Stage primaryStage) {
@@ -28,12 +32,19 @@ public class GUI {
     private void gui() {
         //Menu
         MenuBar menuBar = new MenuBar();
-        Menu file = new Menu("File");
-        MenuItem open = new MenuItem("Open"), save = new MenuItem("Save"), exit = new MenuItem("Exit");
+        Menu file = new Menu("File"), openSetting = new Menu("Open Setting");
 
         //Menu Children
         menuBar.getMenus().addAll(file, DisplayHelp.help, DisplayText.directoryText);
-        file.getItems().addAll(open, save, new SeparatorMenuItem(), exit);
+
+        //MenuItem Children
+        MenuItem open = new MenuItem("Open"), save = new MenuItem("Save"), exit = new MenuItem("Exit");
+        RadioMenuItem singleDirectory = new RadioMenuItem("Single"), multipleDirectory = new RadioMenuItem("Multiple");
+        ToggleGroup tg = new ToggleGroup();
+        tg.getToggles().addAll(singleDirectory, multipleDirectory);
+        openSetting.getItems().addAll(singleDirectory, multipleDirectory);
+        singleDirectory.setSelected(true);
+        file.getItems().addAll(open, openSetting, save, new SeparatorMenuItem(), exit);
 
         //UI
         BorderPane borderPane = new BorderPane();
@@ -50,7 +61,11 @@ public class GUI {
 
         //Handlers
         open.setOnAction(e -> {
-            buildCache.selectFolder(IO.readDirectoryListOfFiles());
+            if (singleDirectory.isSelected() && !multipleDirectory.isSelected()) {
+                singleCache.selectFolder(IO.readDirectory());
+            } else if (multipleDirectory.isSelected() && !singleDirectory.isSelected()) {
+                multiCache.selectFolder(IO.readMultipleDirectories());
+            }
         });
         save.setOnAction(e -> {
             //DisplaySave.show(); //Window to display chosen images where user will be able to re-arrange order etc before writing image

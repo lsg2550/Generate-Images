@@ -10,31 +10,31 @@ import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import utils.benchmarking.MemoryUsage;
+import utils.parse.TryParse;
 
 /**
  *
  * @author Luis
  */
-public class Cache {
+public class CacheSingle {
 
     private static final char[] ENGLISH_ALPHABET = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
         'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
         'x', 'y', 'z'};
-    private static final ArrayList<CacheBuild> CACHE_LIST = new ArrayList<CacheBuild>(26);
 
-    public void selectFolder(File[] selectedDirectory) {
-        if (selectedDirectory != null) {
+    public void selectFolder(Object selectedObjects) {
+        if (TryParse.TryFileArray(selectedObjects) && (File[]) selectedObjects != null) {
             DisplayText.setUpdateText("Loading Images...");
 
             new Thread(() -> {
-                cleanup();
-                processAndBuild(selectedDirectory);
+                CacheList.cleanup();
+                processAndBuild((File[]) selectedObjects);
 
                 System.out.println("Memory Used: " + MemoryUsage.memoryUsageInMBytes() + "MB");
             }).start();
+        } else {
+            DisplayText.setUpdateText("No Directory Was Selected/Current Directory is Already Selected/Directory Selected Contains Directories");
         }
-
-        DisplayText.setUpdateText("No Directory Was Selected or the Current Directory is Already Selected!");
     }
 
     private void processAndBuild(File[] selectedDirectory) {
@@ -51,8 +51,8 @@ public class Cache {
                 filePath = file.toURI().toURL().toExternalForm();
                 //System.out.println("File Read: " + filePath); //Logging
 
-                for (CacheBuild cacheType : CACHE_LIST) {
-                    if (cacheType.getIdentifier() == getListDir(file.getName())) {
+                for (CacheBuild cacheType : CacheList.getCACHE_LIST()) {
+                    if (cacheType.getArrayListCharIdentifier() == getListDir(file.getName())) {
                         cacheType.getArrayListOfImages().add(new Image(filePath));
                         cacheTypeAlreadyExists = true;
                         break;
@@ -60,7 +60,7 @@ public class Cache {
                 }
 
                 if (!cacheTypeAlreadyExists) {
-                    CACHE_LIST.add(new CacheBuild(getListDir(file.getName()), new Image(filePath)));
+                    CacheList.getCACHE_LIST().add(new CacheBuild(getListDir(file.getName()), new Image(filePath)));
                 }
 
                 cacheTypeAlreadyExists = false; //Resets boolean
@@ -74,7 +74,7 @@ public class Cache {
         }
 
         /*Builds*/
-        CACHE_LIST.stream().forEach((cacheType) -> {
+        CacheList.getCACHE_LIST().stream().forEach((cacheType) -> {
 
             cacheType.buildCacheType();
 
@@ -102,15 +102,5 @@ public class Cache {
         }
 
         return ' ';
-    }
-
-    private void cleanup() {
-        Platform.runLater(() -> {
-            DisplayPreviewImageView.setImageForImageView(null);
-            DisplayCenterScrollPane.clearHBox();
-        });
-
-        DrawPreview.clear();
-        CACHE_LIST.clear();
     }
 }

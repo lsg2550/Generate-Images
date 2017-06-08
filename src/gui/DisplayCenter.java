@@ -12,7 +12,7 @@ import javafx.scene.text.Text;
  *
  * @author Luis
  */
-public class DisplayCenter {
+class DisplayCenter {
 
     //UI
     protected static VBox GENERATED_VBOX = new VBox(), CENTER_ALL_CONTAINER_VBOX = new VBox();

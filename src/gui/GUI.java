@@ -1,8 +1,6 @@
 package gui;
 
 import assets.icon.Icon;
-import cache.CacheMultiple;
-import cache.CacheSingle;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -13,16 +11,15 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import utils.io.IO;
+import utils.thread.BuildThread;
 
 /**
  *
  * @author Luis
  */
-public class GUI {
+class GUI {
 
-    private CacheSingle singleCache = new CacheSingle();
-    private CacheMultiple multiCache = new CacheMultiple();
-    private Stage primaryStage;
+    private final Stage primaryStage;
 
     GUI(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -54,6 +51,7 @@ public class GUI {
 
         //Scene & Stage
         Scene scene = new Scene(borderPane, 800, 600);
+        primaryStage.setTitle("Generate Images");
         primaryStage.getIcons().add(Icon.ICON);
         primaryStage.setResizable(false);
         primaryStage.setScene(scene);
@@ -61,10 +59,14 @@ public class GUI {
 
         //Handlers
         open.setOnAction(e -> {
-            if (singleDirectory.isSelected() && !multipleDirectory.isSelected()) {
-                singleCache.selectFolder(IO.readDirectory());
+            //Was having some issue where if single was selected, it considered multiple to be selected
+            //these conditionals fixed it for some reason
+            if (singleDirectory.isSelected() && !multipleDirectory.isSelected()) { 
+                BuildThread.runSingleBuild();
+                //singleCache.selectFolder(IO.readDirectory());
             } else if (multipleDirectory.isSelected() && !singleDirectory.isSelected()) {
-                multiCache.selectFolder(IO.readMultipleDirectories());
+                BuildThread.runMultiBuild();
+                //multiCache.selectFolder(IO.readMultipleDirectories());
             }
         });
         save.setOnAction(e -> {

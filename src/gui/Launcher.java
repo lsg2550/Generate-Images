@@ -18,6 +18,7 @@ public class Launcher extends Application {
         DisplayWindow.init();
         DisplayBottom.init();
         DisplayCenter.init();
+        DisplayAlert.init();
         DisplaySave.init();
         DisplayHelp.init();
         DisplayCenterScrollPane.init();

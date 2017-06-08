@@ -23,7 +23,7 @@ class DisplayHelp {
         help.getItems().add(about);
 
         //Scene
-        Scene scene = new Scene(aboutPane(), 100, 100);
+        Scene scene = new Scene(aboutPane(), 150, 100);
 
         about.setOnAction(e -> {
             DisplayWindow.setResizable(false);

@@ -1,16 +1,12 @@
 package cache;
 
 import gui.DisplayCenterScrollPane;
-import gui.DisplayPreviewImageView;
 import gui.DisplayText;
 import gui.DisplayProgressBar;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
-import utils.benchmarking.MemoryUsage;
-import utils.parse.TryParse;
 
 /**
  *
@@ -22,18 +18,21 @@ public class CacheSingle {
         'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
         'x', 'y', 'z'};
 
-    public void selectFolder(Object selectedObjects) {
-        if (TryParse.TryFileArray(selectedObjects) && (File[]) selectedObjects != null) {
-            DisplayText.setUpdateText("Loading Images...");
+    public void selectFolder(File[] selectedObjects) {
+        if (selectedObjects != null) {
+            Platform.runLater(() -> {
+                DisplayText.setUpdateText("Loading Images...");
+            });
 
-            new Thread(() -> {
-                CacheList.cleanup();
-                processAndBuild((File[]) selectedObjects);
-
-                System.out.println("Memory Used: " + MemoryUsage.memoryUsageInMBytes() + "MB");
-            }).start();
+            //new Thread(() -> {
+            CacheList.cleanup();
+            processAndBuild(selectedObjects);
+            //System.out.println("Memory Used: " + MemoryUsage.memoryUsageInMBytes() + "MB"); //Logging
+            //}).start();
         } else {
-            DisplayText.setUpdateText("No Directory Was Selected/Current Directory is Already Selected/Directory Selected Contains Directories");
+            Platform.runLater(() -> {
+                DisplayText.setUpdateText("No Directory Was Selected - Current Directory is Already Selected - Directory Selected Only Contains Directories");
+            });
         }
     }
 
@@ -75,13 +74,11 @@ public class CacheSingle {
 
         /*Builds*/
         CacheList.getCACHE_LIST().stream().forEach((cacheType) -> {
-
             cacheType.buildCacheType();
 
             Platform.runLater(() -> {
                 DisplayCenterScrollPane.addToHBox(cacheType.getRoot());
             });
-
         });
 
         Platform.runLater(() -> {

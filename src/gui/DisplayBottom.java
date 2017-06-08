@@ -7,7 +7,7 @@ import javafx.scene.layout.HBox;
  *
  * @author Luis
  */
-public class DisplayBottom {
+class DisplayBottom {
 
     protected static HBox hb = new HBox(5);
 

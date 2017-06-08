@@ -30,6 +30,14 @@ public class DisplayWindow {
         EXTRA_DISPLAY.setScene(scene);
     }
 
+    public static void close() {
+        EXTRA_DISPLAY.close();
+    }
+
+    public static void showAndWait() {
+        EXTRA_DISPLAY.showAndWait();
+    }
+
     public static void show() {
         EXTRA_DISPLAY.show();
     }

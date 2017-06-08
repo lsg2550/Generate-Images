@@ -49,4 +49,5 @@ public class DrawPreview {
     public static ArrayList<ImageView> getSELECTED_IMAGES() {
         return SELECTED_IMAGES;
     }
+    
 }

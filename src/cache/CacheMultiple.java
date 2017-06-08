@@ -6,8 +6,6 @@ import gui.DisplayText;
 import java.io.File;
 import java.util.List;
 import javafx.application.Platform;
-import utils.benchmarking.MemoryUsage;
-import utils.parse.TryParse;
 
 /**
  *
@@ -15,18 +13,22 @@ import utils.parse.TryParse;
  */
 public class CacheMultiple {
 
-    public void selectFolder(Object selectedObjects) {
-        if (TryParse.TryListOfFileArray(selectedObjects) && (List<File[]>) selectedObjects != null) {
-            DisplayText.setUpdateText("Loading Images...");
+    public void selectFolder(List<File[]> selectedObjects) {
+        if (selectedObjects != null) {
+            Platform.runLater(() -> {
+                DisplayText.setUpdateText("Loading Images...");
+            });
 
-            new Thread(() -> {
-                CacheList.cleanup();
-                processAndBuild((List<File[]>) selectedObjects);
+            //new Thread(() -> {
+            CacheList.cleanup();
+            processAndBuild((List<File[]>) selectedObjects);
 
-                System.out.println("Memory Used: " + MemoryUsage.memoryUsageInMBytes() + "MB");
-            }).start();
+            //System.out.println("Memory Used: " + MemoryUsage.memoryUsageInMBytes() + "MB"); //Logging
+            //}).start();
         } else {
-            DisplayText.setUpdateText("No Directory Was Selected/Current Directory is Already Selected/Directory Selected Contains Directories");
+            Platform.runLater(() -> {
+                DisplayText.setUpdateText("No Directory Was Selected - Current Directory is Already Selected");
+            });
         }
     }
 
@@ -34,7 +36,6 @@ public class CacheMultiple {
         /*Processes*/
         selectedDirectories.forEach((selectedDirectory) -> {
             DisplayProgressBar.setProgress(selectedDirectories.indexOf(selectedDirectory) / selectedDirectories.size());
-
             CacheList.getCACHE_LIST().add(new CacheBuild(selectedDirectory));
         });
 

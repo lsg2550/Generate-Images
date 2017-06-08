@@ -1,11 +1,8 @@
 package utils.thread;
 
-import cache.CacheMultiple;
-import cache.CacheSingle;
-import gui.DisplayAlert;
-import java.io.File;
-import java.util.List;
-import utils.io.IO;
+import cache.Cache;
+import utils.benchmarking.MemoryUsage;
+import utils.io.Read;
 
 /**
  *
@@ -15,33 +12,18 @@ public class BuildThread {
 
     private static Thread buildThread = new Thread();
 
-    public static void runSingleBuild() {
+    public static void runBuild(boolean buildType) {
         if (!buildThread.isAlive()) {
-            File[] temp = IO.readDirectory();
+            Cache cache = new Cache(Read.readDirectory(buildType));
 
-            buildThread = new Thread(() -> {
-                new CacheSingle().selectFolder(temp);
-            });
-
+            buildThread = new Thread(cache);
             buildThread.start();
         } else {
-            DisplayAlert.show("You're currently loading images would you like to stop?");
-            //System.out.println("You're currently loading images would you like to stop?");
+            ThreadAlert.show();
         }
     }
 
-    public static void runMultiBuild() {
-        if (!buildThread.isAlive()) {
-            List<File[]> temp = IO.readMultipleDirectories();
-
-            buildThread = new Thread(() -> {
-                new CacheMultiple().selectFolder(temp);
-            });
-
-            buildThread.start();
-        } else {
-            DisplayAlert.show("You're currently loading images would you like to stop?");
-            //System.out.println("You're currently loading images would you like to stop?");
-        }
+    protected static void interruptThread() {
+        buildThread.interrupt();
     }
 }

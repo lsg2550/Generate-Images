@@ -1,6 +1,6 @@
 package cache;
 
-import gui.DisplayWindow;
+import gui.DisplayStage;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -136,8 +136,8 @@ class CacheBuild {
         });
 
         EventHandler eh = (EventHandler) (Event event) -> {
-            DisplayWindow.setScene(scene);
-            DisplayWindow.show();
+            DisplayStage.setScene(scene);
+            DisplayStage.show();
         };
 
         extend.setOnAction(eh);

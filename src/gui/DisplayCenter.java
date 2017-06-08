@@ -12,15 +12,16 @@ import javafx.scene.text.Text;
  *
  * @author Luis
  */
-class DisplayCenter {
+class DisplayCenter { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
     //UI
-    protected static VBox GENERATED_VBOX = new VBox(), CENTER_ALL_CONTAINER_VBOX = new VBox();
+    private static final VBox GENERATED_VBOX = new VBox(),
+            CENTER_ALL_CONTAINER_VBOX = new VBox();
 
     //Initialize
     protected static void init() {
         //Image Preview VBox
-        GENERATED_VBOX.getChildren().addAll(new Text("Image To Be Generated"), DisplayPreviewImageView.PREVIEW_IMAGEVIEW);
+        GENERATED_VBOX.getChildren().addAll(new Text("Image To Be Generated"), DisplayPreviewImageView.getPREVIEW_IMAGEVIEW());
         GENERATED_VBOX.setAlignment(Pos.CENTER);
         GENERATED_VBOX.setMinSize(250, 250);
 
@@ -40,15 +41,23 @@ class DisplayCenter {
         GENERATED_VBOX.setOnMouseClicked(e -> {
             if (DisplayPreviewImageView.containsImage()) {
                 iv.setImage(DisplayPreviewImageView.getImageFromImageView());
-                DisplayWindow.setScene(scene);
-                DisplayWindow.show();
+                DisplayStage.setScene(scene);
+                DisplayStage.show();
             }
         });
 
         //Container for all nodes
         CENTER_ALL_CONTAINER_VBOX.heightProperty().isEqualTo(CENTER_ALL_CONTAINER_VBOX.getScene().getHeight(), 5);
         CENTER_ALL_CONTAINER_VBOX.widthProperty().isEqualTo(CENTER_ALL_CONTAINER_VBOX.getScene().getWidth(), 5);
-        CENTER_ALL_CONTAINER_VBOX.getChildren().addAll(DisplayCenterScrollPane.SCROLLPANE_HOLDING_HBOX, GENERATED_VBOX);
+        CENTER_ALL_CONTAINER_VBOX.getChildren().addAll(DisplayCenterScrollPane.getSCROLLPANE_HOLDING_HBOX(), GENERATED_VBOX);
         CENTER_ALL_CONTAINER_VBOX.setAlignment(Pos.CENTER);
+    }
+
+    protected static VBox getGENERATED_VBOX() {
+        return GENERATED_VBOX;
+    }
+
+    protected static VBox getCENTER_ALL_CONTAINER_VBOX() {
+        return CENTER_ALL_CONTAINER_VBOX;
     }
 }

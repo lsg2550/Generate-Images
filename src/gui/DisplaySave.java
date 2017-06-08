@@ -13,13 +13,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import utils.cloning.ImageClone;
-import utils.io.IO;
+import utils.io.Read;
+import utils.io.Save;
 
 /**
  *
  * @author Luis
  */
-class DisplaySave implements Cloneable {
+class DisplaySave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
     protected static Scene saveScene;
     private final static HBox VIEW_HBOX = new HBox(2.5);
@@ -55,7 +56,7 @@ class DisplaySave implements Cloneable {
 
         //Handlers
         save.setOnAction(e -> {
-            IO.saveFile();
+            Save.saveFile();
         });
     }
 
@@ -96,9 +97,9 @@ class DisplaySave implements Cloneable {
             }
         }
 
-        DisplayWindow.setResizable(false);
-        DisplayWindow.setScene(saveScene);
-        DisplayWindow.show();
+        DisplayStage.setResizable(false);
+        DisplayStage.setScene(saveScene);
+        DisplayStage.show();
     }
 
     private static ArrayList<ImageView> cloneAndReplace(ArrayList<ImageView> toBeCloned) {

@@ -17,4 +17,8 @@ public class MemoryUsage {
     public static long memoryUsageInMBytes() {
         return memoryUsageInKBytes() / 1024;
     }
+
+    public static void memoryUsage() { //Logging
+        System.out.println("Memory Used: " + MemoryUsage.memoryUsageInMBytes() + "MB");
+    }
 }

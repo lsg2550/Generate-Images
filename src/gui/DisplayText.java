@@ -7,24 +7,31 @@ import javafx.scene.text.Text;
  *
  * @author Luis
  */
-public class DisplayText {
+public class DisplayText { //USED BY CLASSES OUTSIDE PACKAGE
 
-    protected static Text updateText = new Text();
-    protected static Menu directoryText = new Menu();
+    private static final Menu DIRECTORY_TEXT = new Menu();
+    private static final Text UPDATE_TEXT = new Text();
 
+    /*Accessible only by inside package - GUI purposes*/
+    protected static Menu getDirectoryTextMenu() {
+        return DIRECTORY_TEXT;
+    }
+
+    protected static Text getUpdateTextNode() {
+        return UPDATE_TEXT;
+    }
+
+    /*Accessible by other classes - In and outside package*/
     public static void setUpdateText(String message) {
-        updateText.setText(message);
+        UPDATE_TEXT.setText(message);
     }
 
     public static void setDirectoryText(String message) {
-        directoryText.setText(message);
-    }
-
-    public static String getUpdateText() {
-        return updateText.getText();
+        DIRECTORY_TEXT.setText(message);
     }
 
     public static String getDirectoryText() {
-        return directoryText.getText();
+        return DIRECTORY_TEXT.getText();
     }
+
 }

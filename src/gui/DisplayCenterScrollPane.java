@@ -9,10 +9,10 @@ import javafx.scene.layout.HBox;
  *
  * @author Luis
  */
-public class DisplayCenterScrollPane {
+public class DisplayCenterScrollPane { //USED BY CLASSES OUTSIDE PACKAGE
 
     private final static HBox HBOX_INSIDE_SCROLLPANE = new HBox(2.5);
-    protected final static ScrollPane SCROLLPANE_HOLDING_HBOX = new ScrollPane(HBOX_INSIDE_SCROLLPANE);
+    private static final ScrollPane SCROLLPANE_HOLDING_HBOX = new ScrollPane(HBOX_INSIDE_SCROLLPANE);
 
     protected static void init() {
         //HBox inside Scrollpane
@@ -25,6 +25,12 @@ public class DisplayCenterScrollPane {
         SCROLLPANE_HOLDING_HBOX.setPannable(true);
     }
 
+    /*Accessible only by inside package - GUI purposes*/
+    protected static ScrollPane getSCROLLPANE_HOLDING_HBOX() {
+        return SCROLLPANE_HOLDING_HBOX;
+    }
+
+    /*Accessible by other classes - In and outside package*/
     public static void addToHBox(Node node) {
         HBOX_INSIDE_SCROLLPANE.getChildren().add(node);
     }

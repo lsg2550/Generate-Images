@@ -1,9 +1,11 @@
 package gui;
 
+import utils.thread.ThreadAlert;
 import assets.css.CSS;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import utils.io.IO;
+import utils.io.Read;
+import utils.io.Save;
 
 /**
  *
@@ -13,17 +15,23 @@ public class Launcher extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        //Stage Init
         GUI gui = new GUI(primaryStage);
         CSS.init(primaryStage.getScene());
-        DisplayWindow.init();
-        DisplayBottom.init();
-        DisplayCenter.init();
-        DisplayAlert.init();
-        DisplaySave.init();
-        DisplayHelp.init();
+
+        //GUI Init
         DisplayCenterScrollPane.init();
         DisplayPreviewImageView.init();
-        IO.init();
+        DisplayBottom.init();
+        DisplayCenter.init();
+        DisplayMenuBar.init();
+        DisplayAbout.init();
+        DisplayStage.init();
+        DisplaySave.init();
+
+        //Utils Init
+        ThreadAlert.init();
+        Save.init();
     }
 
     /**

@@ -6,11 +6,11 @@ import javafx.scene.control.ProgressBar;
  *
  * @author Luis
  */
-public class DisplayProgressBar {
+public class DisplayProgressBar { //USED BY CLASSES OUTSIDE PACKAGE
 
-    protected static ProgressBar pBar = new ProgressBar(0);
+    private static final ProgressBar PROGRESS_BAR = new ProgressBar(0);
 
-    public static void setProgress(double progress) {
-        pBar.setProgress(progress);
+    public static ProgressBar getpBar() {
+        return PROGRESS_BAR;
     }
 }

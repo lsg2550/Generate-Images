@@ -1,6 +1,8 @@
-package gui;
+package utils.thread;
 
 import assets.icon.Icon;
+import gui.DisplayStage;
+import gui.DisplayText;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -21,15 +23,12 @@ import javafx.scene.text.TextAlignment;
  *
  * @author Luis
  */
-public class DisplayAlert {
-
-    //Text
-    private static final Text TEXT = new Text();
+public class ThreadAlert {
 
     //Scene
     private static Scene scene;
 
-    protected static void init() {
+    public static void init() {
         //VBox
         VBox root = new VBox(10);
         root.setAlignment(Pos.CENTER);
@@ -38,21 +37,31 @@ public class DisplayAlert {
         HBox topHB = new HBox(30);
         topHB.setAlignment(Pos.CENTER);
 
+        HBox buttonHB = new HBox(5);
+        buttonHB.setAlignment(Pos.CENTER);
+
         //StackPane
         StackPane stackPane = new StackPane();
         stackPane.setAlignment(Pos.CENTER);
 
         //Button
-        Button ok = new Button("OK");
-        ok.setOnAction(e -> {
-            DisplayWindow.close();
+        Button btnInterruptThread = new Button("Yes"),
+                btnKeepThread = new Button("No");
+        btnKeepThread.setOnAction(e -> {
+            DisplayStage.close();
+        });
+        btnInterruptThread.setOnAction(e -> {
+            DisplayText.setUpdateText("Please Wait For The Process To Safely Halt!");
+            BuildThread.interruptThread();
+            DisplayStage.close();
         });
 
         //Text
-        TEXT.setFont(Font.font(null, 12));
-        TEXT.setTextAlignment(TextAlignment.CENTER);
-        TEXT.setWrappingWidth(200); //Find a way to avoid using hardcode
-        TEXT.setFill(Color.BLACK);
+        Text warningText = new Text("You're currently loading images would you like to stop?");
+        warningText.setFont(Font.font(null, 12));
+        warningText.setTextAlignment(TextAlignment.CENTER);
+        warningText.setWrappingWidth(200); //Find a way to avoid using hardcode
+        warningText.setFill(Color.BLACK);
 
         //Label
         Label warningLabel = new Label("ATTENTION!");
@@ -67,18 +76,16 @@ public class DisplayAlert {
 
         //Children
         topHB.getChildren().addAll(warningLabel, warningImageView);
-        stackPane.getChildren().add(TEXT);
-        root.getChildren().addAll(topHB, new Separator(Orientation.HORIZONTAL), stackPane, ok);
+        buttonHB.getChildren().addAll(btnInterruptThread, btnKeepThread);
+        stackPane.getChildren().add(warningText);
+        root.getChildren().addAll(topHB, new Separator(Orientation.HORIZONTAL), stackPane, buttonHB);
         scene = new Scene(root, 300, 150);
     }
 
-    public static void show(String message) {
-        TEXT.setText(message); //Editable Message
-
-        //Stage
-        DisplayWindow.setResizable(false);
-        DisplayWindow.setScene(scene);
-        DisplayWindow.show();
+    public static void show() {
+        DisplayStage.setResizable(false);
+        DisplayStage.setScene(scene);
+        DisplayStage.show();
     }
 
 }

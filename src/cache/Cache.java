@@ -8,9 +8,7 @@ import java.net.MalformedURLException;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
-import utils.io.Read;
 import utils.parse.TryParse;
-import utils.thread.BuildThread;
 
 /**
  *
@@ -71,7 +69,8 @@ public class Cache implements Runnable {
             } else if (TryParse.TryListOfFileArray(selectedDirectory) && selectedDirectory != null) { //Multiple
                 for (File[] files : (List<File[]>) selectedDirectory) {
                     CacheList.getCACHE_LIST().add(new CacheBuild(files));
-                    DisplayProgressBar.getpBar().setProgress((double) (((List<File[]>) selectedDirectory).indexOf(files) / ((List<File[]>) selectedDirectory).size()));
+                    DisplayProgressBar.getpBar().setProgress((double) (((List<File[]>) selectedDirectory).indexOf(files) / ((List<File[]>) selectedDirectory).size())
+                    );
                 }
             } else {
                 Platform.runLater(() -> {
@@ -86,9 +85,8 @@ public class Cache implements Runnable {
             } catch (InterruptedException ex) {
                 Platform.runLater(() -> {
                     DisplayText.setUpdateText("Process Halted");
+                    DisplayText.setDirectoryText(""); //Because the check if the current directory is already selected will trigger even if load was canceled
                 });
-                
-                Thread.currentThread().interrupt();
                 return;
             }
 

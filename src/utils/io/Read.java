@@ -1,17 +1,11 @@
 package utils.io;
 
-import gui.DisplayPreviewImageView;
 import gui.DisplayText;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -39,8 +33,15 @@ public class Read {
 
             return selectedDirectoryFiles;
         } else {
-            List<File> selectedDirectory = Arrays.asList(DIRECTORY_CHOOSER.showDialog(null).listFiles());
+            File[] directory = DIRECTORY_CHOOSER.showDialog(null).listFiles();
+            List<File> selectedDirectory;
             List<File[]> readImages = new ArrayList<>(10);
+
+            if (directory != null) {
+                selectedDirectory = null;
+            } else {
+                selectedDirectory = Arrays.asList(directory);
+            }
 
             if (selectedDirectory != null) {
                 DIRECTORY_CHOOSER.setInitialDirectory(selectedDirectory.get(0).getParentFile().getParentFile());

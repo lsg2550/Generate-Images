@@ -85,7 +85,7 @@ public class ThreadAlert {
     public static void show() {
         DisplayStage.setResizable(false);
         DisplayStage.setScene(scene);
-        DisplayStage.show();
+        DisplayStage.showAndWait();
     }
 
 }

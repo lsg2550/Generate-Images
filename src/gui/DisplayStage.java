@@ -34,6 +34,10 @@ public class DisplayStage { //USED BY CLASSES OUTSIDE PACKAGE
         OUTER_STAGE.close();
     }
 
+    public static void showAndWait(){
+        OUTER_STAGE.showAndWait();
+    }
+    
     public static void show() {
         OUTER_STAGE.show();
     }

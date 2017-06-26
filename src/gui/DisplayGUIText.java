@@ -7,7 +7,7 @@ import javafx.scene.text.Text;
  *
  * @author Luis
  */
-public class DisplayText { //USED BY CLASSES OUTSIDE PACKAGE
+public class DisplayGUIText { //USED BY CLASSES OUTSIDE PACKAGE
 
     private static final Menu DIRECTORY_TEXT = new Menu();
     private static final Text UPDATE_TEXT = new Text();

@@ -1,0 +1,179 @@
+package gui;
+
+import cache.CacheList;
+import cache.DrawPreview;
+import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import utils.cloning.ImageClone;
+import utils.io.Save;
+
+/**
+ *
+ * @author Luis
+ */
+class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKAGE
+
+    private static Scene saveScene;
+    private final static HBox VIEW_HBOX = new HBox(2.5);
+    private final static ScrollPane SCROLLPANE = new ScrollPane(VIEW_HBOX);
+
+    protected static void init() {
+        //Main Container
+        VBox root = new VBox(10.0);
+
+        //Button HBox
+        HBox buttonHB = new HBox(5.0);
+        buttonHB.setAlignment(Pos.CENTER);
+
+        //Scrollpane
+        SCROLLPANE.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        SCROLLPANE.setMinHeight(400);
+        SCROLLPANE.setMinWidth(640);
+        SCROLLPANE.setPannable(true);
+
+        //Ouside ScrollPane
+        Button save = new Button("Save");
+        Button preview = new Button("Preview");
+        Button cancel = new Button("Cancel");
+
+        //Alignments
+        VIEW_HBOX.setAlignment(Pos.CENTER);
+        SCROLLPANE.setFitToHeight(true);
+        SCROLLPANE.setFitToWidth(true);
+        save.setAlignment(Pos.CENTER);
+        root.setAlignment(Pos.BASELINE_CENTER);
+
+        //Misc
+        save.setMaxSize(60, 20);
+
+        //Children
+        SCROLLPANE.setContent(VIEW_HBOX);
+        buttonHB.getChildren().addAll(save, preview, cancel);
+        root.getChildren().addAll(SCROLLPANE, buttonHB);
+        saveScene = new Scene(root, 640, 480);
+
+        //Handlers
+        save.setOnAction(e -> {
+            Save.saveFile(DrawPreview.draw(new ArrayList<>(updateObservableList(images))));
+            DisplayStage.close();
+        });
+        preview.setOnAction(e -> {
+            StackPane sp = new StackPane();
+            sp.getChildren().add(new ImageView(DrawPreview.draw(new ArrayList<>(updateObservableList(images)))));
+
+            Scene scene = new Scene(sp, 800, 600);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.show();
+        });
+        cancel.setOnAction(e -> {
+            DisplayStage.close();
+        });
+    }
+
+    //Create Clones
+    private static ObservableList<ImageView> images;
+    private static ObservableList<Integer> layer;
+
+    //Show Save Menu
+    protected static void show() {
+        //Grab Images
+        if (!CacheList.getSELECTED_IMAGES().isEmpty()) {
+
+            VIEW_HBOX.getChildren().clear(); //Clear Past Images
+
+            //Create Clones
+            images = FXCollections.observableArrayList(cloneAndReplace(CacheList.getSELECTED_IMAGES()));
+            System.out.println("Size of List: " + images.size()); //Logging
+
+            //Iterate and place the clones into the GUI
+            images.forEach((imageView) -> {
+                VIEW_HBOX.getChildren().add(getList(imageView, images.indexOf(imageView)));
+            });
+
+        }
+
+        //Show
+        DisplayStage.setResizable(false);
+        DisplayStage.setScene(saveScene);
+        DisplayStage.show();
+    }
+
+    private static ObservableList<ImageView> updateObservableList(ObservableList<ImageView> oldList) {
+        ObservableList<ImageView> newList = FXCollections.observableArrayList();
+
+        for (ImageView imageView : oldList) {
+            if (!imageView.isDisabled()) {
+                newList.add(imageView);
+            }
+        }
+
+        return newList;
+    }
+
+    //Generates a VBox that contains a checkbox and the imageviews placement in the selected arraylist
+    private static VBox getList(ImageView imageView, int layer) {
+        //Inside VIEW_HBOX
+        HBox innerHB = new HBox(5.0);
+        VBox innerVB = new VBox(2.5);
+
+        //Inside InnerVBox
+        TextField orderInLayer = new TextField("" + layer);
+        CheckBox checkBox = new CheckBox();
+
+        //Alignments
+        orderInLayer.setAlignment(Pos.CENTER);
+        innerHB.setAlignment(Pos.CENTER);
+        innerVB.setAlignment(Pos.CENTER);
+
+        //Misc
+        orderInLayer.setMaxSize(32, 32);
+        imageView.setFitWidth(250);
+        imageView.setFitHeight(250);
+
+        //Children
+        innerHB.getChildren().addAll(orderInLayer, checkBox);
+        innerVB.getChildren().addAll(imageView, innerHB);
+
+        //Handlers
+        checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            orderInLayer.setDisable(newValue);
+            imageView.setDisable(newValue);
+        });
+
+        return innerVB;
+    }
+
+    /**
+     * Method to clone images - due to Java's use of references, loading images
+     * that are in the main GUI only cause them to disappear but load here. So I
+     * am forced to clone.
+     *
+     * @toBeCloned - the images that the user has selected
+     */
+    private static ArrayList<ImageView> cloneAndReplace(ArrayList<ImageView> toBeCloned) {
+        ArrayList<ImageView> temp = new ArrayList<>(toBeCloned.size());
+
+        toBeCloned.forEach((imageView) -> {
+            try {
+                temp.add(new ImageView((Image) new ImageClone(imageView.getImage()).clone()));
+            } catch (CloneNotSupportedException ex) {
+            }
+        });
+
+        return temp;
+    }
+}

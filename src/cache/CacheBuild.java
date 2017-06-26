@@ -1,5 +1,6 @@
 package cache;
 
+import gui.DisplayGUIPreviewImageView;
 import gui.DisplayStage;
 import java.io.File;
 import java.net.MalformedURLException;
@@ -26,14 +27,13 @@ import javafx.scene.layout.VBox;
  */
 class CacheBuild {
 
-    private ArrayList<Image> arrayListOfImages;
-    private char arrayListCharIdentifier;
-    private VBox root = new VBox();
+    private ArrayList<Image> arrayListOfImages; //ArrayList of Images of CacheBuild
+    private char arrayListCharIdentifier; //ID of CacheBuild
+    private VBox root = new VBox(); //VBox Scene from main GUI
 
     protected CacheBuild(File[] listOfImages) {
         arrayListOfImages = new ArrayList<>(listOfImages.length);
 
-        //Because we sanitized forimages during the IO process, we know that this won't be an issue
         for (File image : listOfImages) {
             try {
                 arrayListOfImages.add(new Image(image.toURI().toURL().toExternalForm()));
@@ -43,8 +43,6 @@ class CacheBuild {
     }
 
     protected CacheBuild(char arrayListCharIdentifier, Image image) {
-        //System.out.println("Identifier: " + arrayListCharIdentifier); //Logging
-
         this.arrayListCharIdentifier = arrayListCharIdentifier;
         arrayListOfImages = new ArrayList<>(150);
         arrayListOfImages.add(image);
@@ -75,7 +73,7 @@ class CacheBuild {
         nullImages();
     }
 
-    private CacheBuild(Image image) { //For the submenu
+    protected CacheBuild(Image image) { //For the submenu & savemenu
         buildForSingleImage(image);
     }
 
@@ -99,14 +97,14 @@ class CacheBuild {
             ColorAdjust toGray = new ColorAdjust(1.0, -0.75, 0.0, -0.5);
 
             if (enableDisable.isSelected()) {
-                DrawPreview.remove(imageView);
+                CacheList.remove(imageView);
                 imageView.setEffect(toGray);
             } else {
-                DrawPreview.add(imageView);
+                CacheList.add(imageView);
                 imageView.setEffect(null);
             }
 
-            DrawPreview.draw();
+            DisplayGUIPreviewImageView.setImageForImageView();
         };
 
         enableDisable.selectedProperty().addListener(changeListenerForCheckBox);
@@ -145,12 +143,10 @@ class CacheBuild {
 
     //Garbage Collection Purposes
     private void nullImages() {
-        //System.out.println("Arraylist Size: " + arrayListOfImages.size()
-        //        + ". Arraylist Identifier: " + arrayListIdentifier); //Logging
-
         arrayListOfImages.stream().forEach((image) -> {
             image = null;
         });
+
         arrayListOfImages.trimToSize();
         arrayListOfImages.clear();
         arrayListOfImages = null;

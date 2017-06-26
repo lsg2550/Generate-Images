@@ -21,9 +21,9 @@ class GUI { //NOT USED BY CLASSES OUTSIDE PACKAGE
     private void gui() {
         //UI
         BorderPane borderPane = new BorderPane();
-        borderPane.setTop(DisplayMenuBar.getMENU_BAR());
-        borderPane.setCenter(DisplayCenter.getCENTER_ALL_CONTAINER_VBOX());
-        borderPane.setBottom(DisplayBottom.getHb());
+        borderPane.setTop(DisplayGUIMenuBar.getMENU_BAR());
+        borderPane.setCenter(DisplayGUICenter.getCENTER_ALL_CONTAINER_VBOX());
+        borderPane.setBottom(DisplayGUIBottom.getHb());
 
         //Scene & Stage
         Scene scene = new Scene(borderPane, 800, 600);

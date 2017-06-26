@@ -1,10 +1,10 @@
 package cache;
 
-import gui.DisplayPreviewImageView;
 import java.util.ArrayList;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
@@ -14,11 +14,10 @@ import javafx.scene.paint.Color;
  */
 public class DrawPreview {
 
-    private static final ArrayList<ImageView> SELECTED_IMAGES = new ArrayList<ImageView>(30);
-
-    protected static void draw() {
+    public static Image draw(ArrayList<ImageView> SELECTED_IMAGES) {
         if (!SELECTED_IMAGES.isEmpty()) {
-            Canvas CV = new Canvas(SELECTED_IMAGES.get(0).getImage().getWidth(), SELECTED_IMAGES.get(0).getImage().getHeight());
+            Canvas CV = new Canvas(SELECTED_IMAGES.get(0).getImage().getWidth(),
+                    SELECTED_IMAGES.get(0).getImage().getHeight());
             GraphicsContext GC = CV.getGraphicsContext2D();
 
             SELECTED_IMAGES.forEach((selectedImage) -> {
@@ -28,26 +27,10 @@ public class DrawPreview {
             SnapshotParameters sp = new SnapshotParameters();
             sp.setFill(Color.TRANSPARENT);
 
-            DisplayPreviewImageView.setImageForImageView(CV.snapshot(sp, null));
+            return CV.snapshot(sp, null);
         } else {
-            DisplayPreviewImageView.setImageForImageView(null);
+            return null;
         }
     }
 
-    protected static void remove(ImageView ivToRemove) {
-        SELECTED_IMAGES.remove(ivToRemove);
-    }
-
-    protected static void add(ImageView ivToAdd) {
-        SELECTED_IMAGES.add(ivToAdd);
-    }
-
-    protected static void clear() {
-        SELECTED_IMAGES.clear();
-    }
-
-    public static ArrayList<ImageView> getSELECTED_IMAGES() {
-        return SELECTED_IMAGES;
-    }
-    
 }

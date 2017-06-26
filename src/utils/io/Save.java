@@ -1,10 +1,10 @@
 package utils.io;
 
-import gui.DisplayPreviewImageView;
-import gui.DisplayText;
+import gui.DisplayGUIText;
 import java.io.File;
 import java.io.IOException;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 
@@ -27,20 +27,21 @@ public class Save {
         );
     }
 
-    public static void saveFile() {
+    public static void saveFile(Image image) {
         try {
             File saveFile = FILE_CHOOSER.showSaveDialog(null);
 
             if (saveFile != null) {
                 FILE_CHOOSER.setInitialDirectory(saveFile.getParentFile());
-                ImageIO.write(SwingFXUtils.fromFXImage(DisplayPreviewImageView.getImageFromImageView(), null),
+                
+                ImageIO.write(SwingFXUtils.fromFXImage(image, null),
                         saveFile.toString().substring(saveFile.toString().length() - 3),
                         saveFile
                 );
             }
 
         } catch (NullPointerException | IOException | IllegalArgumentException ex) {
-            DisplayText.setUpdateText("Nothing to Save!");
+            DisplayGUIText.setUpdateText("Nothing to Save!");
         }
     }
 }

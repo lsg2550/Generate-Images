@@ -1,8 +1,8 @@
 package cache;
 
-import gui.DisplayCenterScrollPane;
-import gui.DisplayProgressBar;
-import gui.DisplayText;
+import gui.DisplayGUICenterScrollPane;
+import gui.DisplayGUIProgressBar;
+import gui.DisplayGUIText;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.List;
@@ -30,11 +30,14 @@ public class Cache implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             //Update Text
             Platform.runLater(() -> {
-                DisplayText.setUpdateText("Loading Images...");
+                DisplayGUIText.setUpdateText("Loading Images...");
             });
 
-            //Garbage Collection
-            CacheList.cleanup();
+            //Prevents the clearing of the GUI in case the user still wants to use the current directory
+            if (selectedDirectory != null) {
+                //Garbage Collection
+                CacheList.cleanup();
+            }
 
             /*Processing*/
             if (TryParse.TryFileArray(selectedDirectory) && selectedDirectory != null) { //Single
@@ -43,7 +46,7 @@ public class Cache implements Runnable {
                 String filePath;
 
                 for (File file : (File[]) selectedDirectory) {
-                    DisplayProgressBar.getpBar().setProgress(counter / (double) ((File[]) selectedDirectory).length);
+                    DisplayGUIProgressBar.getpBar().setProgress(counter / (double) ((File[]) selectedDirectory).length);
                     counter++;
 
                     try {
@@ -69,12 +72,12 @@ public class Cache implements Runnable {
             } else if (TryParse.TryListOfFileArray(selectedDirectory) && selectedDirectory != null) { //Multiple
                 for (File[] files : (List<File[]>) selectedDirectory) {
                     CacheList.getCACHE_LIST().add(new CacheBuild(files));
-                    DisplayProgressBar.getpBar().setProgress((double) (((List<File[]>) selectedDirectory).indexOf(files) / ((List<File[]>) selectedDirectory).size())
+                    DisplayGUIProgressBar.getpBar().setProgress((double) (((List<File[]>) selectedDirectory).indexOf(files) / ((List<File[]>) selectedDirectory).size())
                     );
                 }
             } else {
                 Platform.runLater(() -> {
-                    DisplayText.setUpdateText("No Directory Was Selected - Current Directory is Already Selected");
+                    DisplayGUIText.setUpdateText("No Directory Was Selected - Current Directory is Already Selected");
                 });
 
                 return;
@@ -84,8 +87,8 @@ public class Cache implements Runnable {
                 Thread.sleep(200); //Sleep 
             } catch (InterruptedException ex) {
                 Platform.runLater(() -> {
-                    DisplayText.setUpdateText("Process Halted");
-                    DisplayText.setDirectoryText(""); //Because the check if the current directory is already selected will trigger even if load was canceled
+                    DisplayGUIText.setUpdateText("Process Halted");
+                    DisplayGUIText.setDirectoryText(""); //Because the check if the current directory is already selected will trigger even if load was canceled
                 });
                 return;
             }
@@ -94,12 +97,12 @@ public class Cache implements Runnable {
             CacheList.getCACHE_LIST().stream().forEach((cacheType) -> {
                 cacheType.buildCacheType();
                 Platform.runLater(() -> {
-                    DisplayCenterScrollPane.addToHBox(cacheType.getRoot());
+                    DisplayGUICenterScrollPane.addToHBox(cacheType.getRoot());
                 });
             });
             Platform.runLater(() -> {
-                DisplayProgressBar.getpBar().setProgress(1);
-                DisplayText.setUpdateText("Done!");
+                DisplayGUIProgressBar.getpBar().setProgress(1);
+                DisplayGUIText.setUpdateText("Done!");
             });
 
             //DONE

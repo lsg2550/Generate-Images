@@ -4,7 +4,6 @@ import assets.icon.Icon;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -14,9 +13,9 @@ import javafx.scene.text.TextAlignment;
  *
  * @author Luis
  */
-class DisplayAbout { //NOT USED BY CLASSES OUTSIDE PACKAGE
+class DisplayMenuAbout { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
-    private static final MenuItem ABOUT_MENUITEM = new MenuItem("About");
+    private static Scene scene;
 
     protected static void init() {
         //Root
@@ -26,24 +25,23 @@ class DisplayAbout { //NOT USED BY CLASSES OUTSIDE PACKAGE
         //Node - Column - Row
         ImageView imageView = new ImageView(Icon.ICON);
         Text info = new Text("Made by Luis"
-                + "\nGitHub: @lsg2550"
-                + "\n2016-2017"
-                + "\nCurrent OS: " + System.getProperty("os.name"));
+                + System.lineSeparator()
+                + "GitHub: @lsg2550"
+                + System.lineSeparator()
+                + "Current OS: " + System.getProperty("os.name")
+                + System.lineSeparator()
+                + "Icons by Enterbrain");
         info.setTextAlignment(TextAlignment.CENTER);
 
         root.getChildren().addAll(imageView, info);
 
         //Scene
-        Scene scene = new Scene(root, 150, 100);
-
-        ABOUT_MENUITEM.setOnAction(e -> {
-            DisplayStage.setResizable(false);
-            DisplayStage.setScene(scene);
-            DisplayStage.show();
-        });
+        scene = new Scene(root, 150, 100);
     }
 
-    protected static MenuItem getABOUT_MENUITEM() {
-        return ABOUT_MENUITEM;
+    protected static void show() {
+        DisplayStage.setResizable(false);
+        DisplayStage.setScene(scene);
+        DisplayStage.show();
     }
 }

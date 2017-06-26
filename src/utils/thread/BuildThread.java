@@ -1,7 +1,6 @@
 package utils.thread;
 
 import cache.Cache;
-import utils.benchmarking.MemoryUsage;
 import utils.io.Read;
 
 /**
@@ -12,9 +11,9 @@ public class BuildThread {
 
     private static Thread buildThread = new Thread();
 
-    public static void runBuild(boolean buildType) {
+    public static void runBuild() {
         if (!buildThread.isAlive()) {
-            Cache cache = new Cache(Read.readDirectory(buildType));
+            Cache cache = new Cache(Read.readDirectory());
 
             buildThread = new Thread(cache);
             buildThread.start();

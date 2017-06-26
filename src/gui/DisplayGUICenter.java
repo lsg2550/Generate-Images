@@ -12,7 +12,7 @@ import javafx.scene.text.Text;
  *
  * @author Luis
  */
-class DisplayCenter { //NOT USED BY CLASSES OUTSIDE PACKAGE
+class DisplayGUICenter { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
     //UI
     private static final VBox GENERATED_VBOX = new VBox(),
@@ -21,7 +21,7 @@ class DisplayCenter { //NOT USED BY CLASSES OUTSIDE PACKAGE
     //Initialize
     protected static void init() {
         //Image Preview VBox
-        GENERATED_VBOX.getChildren().addAll(new Text("Image To Be Generated"), DisplayPreviewImageView.getPREVIEW_IMAGEVIEW());
+        GENERATED_VBOX.getChildren().addAll(new Text("Image To Be Generated"), DisplayGUIPreviewImageView.getPREVIEW_IMAGEVIEW());
         GENERATED_VBOX.setAlignment(Pos.CENTER);
         GENERATED_VBOX.setMinSize(250, 250);
 
@@ -39,8 +39,8 @@ class DisplayCenter { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
         //ImageView
         GENERATED_VBOX.setOnMouseClicked(e -> {
-            if (DisplayPreviewImageView.containsImage()) {
-                iv.setImage(DisplayPreviewImageView.getImageFromImageView());
+            if (DisplayGUIPreviewImageView.containsImage()) {
+                iv.setImage(DisplayGUIPreviewImageView.getImageFromImageView());
                 DisplayStage.setScene(scene);
                 DisplayStage.show();
             }
@@ -49,7 +49,7 @@ class DisplayCenter { //NOT USED BY CLASSES OUTSIDE PACKAGE
         //Container for all nodes
         CENTER_ALL_CONTAINER_VBOX.heightProperty().isEqualTo(CENTER_ALL_CONTAINER_VBOX.getScene().getHeight(), 5);
         CENTER_ALL_CONTAINER_VBOX.widthProperty().isEqualTo(CENTER_ALL_CONTAINER_VBOX.getScene().getWidth(), 5);
-        CENTER_ALL_CONTAINER_VBOX.getChildren().addAll(DisplayCenterScrollPane.getSCROLLPANE_HOLDING_HBOX(), GENERATED_VBOX);
+        CENTER_ALL_CONTAINER_VBOX.getChildren().addAll(DisplayGUICenterScrollPane.getSCROLLPANE_HOLDING_HBOX(), GENERATED_VBOX);
         CENTER_ALL_CONTAINER_VBOX.setAlignment(Pos.CENTER);
     }
 

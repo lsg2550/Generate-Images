@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
  *
  * @author Luis
  */
-public class DisplayCenterScrollPane { //USED BY CLASSES OUTSIDE PACKAGE
+public class DisplayGUICenterScrollPane { //USED BY CLASSES OUTSIDE PACKAGE
 
     private final static HBox HBOX_INSIDE_SCROLLPANE = new HBox(2.5);
     private static final ScrollPane SCROLLPANE_HOLDING_HBOX = new ScrollPane(HBOX_INSIDE_SCROLLPANE);

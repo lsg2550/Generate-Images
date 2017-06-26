@@ -1,11 +1,12 @@
 package utils.io;
 
-import gui.DisplayText;
+import gui.DisplayGUIText;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javafx.stage.DirectoryChooser;
+import utils.settings.Settings;
 
 /**
  *
@@ -16,14 +17,14 @@ public class Read {
     //Selecting Directory & Saving File
     private static final DirectoryChooser DIRECTORY_CHOOSER = new DirectoryChooser();
 
-    public static Object readDirectory(boolean type) {
-        if (type) {
+    public static Object readDirectory() {
+        if (Settings.loadType) { //Single
             File selectedDirectory = DIRECTORY_CHOOSER.showDialog(null);
             File[] selectedDirectoryFiles = null;
 
-            if (selectedDirectory != null /*Directory Selected*/ && !selectedDirectory.getAbsolutePath().equals(DisplayText.getDirectoryText()) /*Directory is not the current one*/) {
+            if (selectedDirectory != null /*Directory Selected*/ && !selectedDirectory.getAbsolutePath().equals(DisplayGUIText.getDirectoryText()) /*Directory is not the current one*/) {
                 DIRECTORY_CHOOSER.setInitialDirectory(selectedDirectory.getParentFile());
-                DisplayText.setDirectoryText(selectedDirectory.getAbsolutePath());
+                DisplayGUIText.setDirectoryText(selectedDirectory.getAbsolutePath());
 
                 selectedDirectoryFiles = selectedDirectory.listFiles((File file, String name)
                         -> name.toLowerCase().endsWith(".png")
@@ -32,22 +33,22 @@ public class Read {
             }
 
             return selectedDirectoryFiles;
-        } else {
-            File[] directory = DIRECTORY_CHOOSER.showDialog(null).listFiles();
-            List<File> selectedDirectory;
+        } else { //Multiple
+            File selectedDirectory = DIRECTORY_CHOOSER.showDialog(null);
+            List<File> files;
             List<File[]> readImages = new ArrayList<>(10);
 
-            if (directory != null) {
-                selectedDirectory = null;
+            if (selectedDirectory != null) {
+                files = Arrays.asList(selectedDirectory.listFiles());
             } else {
-                selectedDirectory = Arrays.asList(directory);
+                files = null;
             }
 
-            if (selectedDirectory != null) {
-                DIRECTORY_CHOOSER.setInitialDirectory(selectedDirectory.get(0).getParentFile().getParentFile());
-                DisplayText.setDirectoryText(selectedDirectory.get(0).getParentFile().getAbsolutePath());
+            if (files != null) {
+                DIRECTORY_CHOOSER.setInitialDirectory(files.get(0).getParentFile().getParentFile());
+                DisplayGUIText.setDirectoryText(files.get(0).getParentFile().getAbsolutePath());
 
-                selectedDirectory.stream().filter((file) -> (file.isDirectory())).forEachOrdered((file) -> {
+                files.stream().filter((file) -> (file.isDirectory())).forEachOrdered((file) -> {
                     File[] temp = file.listFiles((File filesFromDirectory, String name)
                             -> name.toLowerCase().endsWith(".png")
                             || name.toLowerCase().endsWith(".jpg")

@@ -10,35 +10,36 @@ import javafx.stage.Stage;
  */
 public class DisplayStage { //USED BY CLASSES OUTSIDE PACKAGE
 
-    private final static Stage OUTER_STAGE = new Stage();
+    private final static Stage DISPLAY_STAGE = new Stage();
 
     protected static void init() {
-        OUTER_STAGE.getIcons().add(Icon.ICON);
-        OUTER_STAGE.setResizable(true);
+        DISPLAY_STAGE.getIcons().add(Icon.ICON);
+        DISPLAY_STAGE.setResizable(true);
 
-        OUTER_STAGE.setOnCloseRequest(e -> {
-            OUTER_STAGE.setScene(null);
-            OUTER_STAGE.setResizable(true);
+        DISPLAY_STAGE.setOnCloseRequest(e -> {
+            DISPLAY_STAGE.setScene(null);
+            DISPLAY_STAGE.setMaximized(false);
+            DISPLAY_STAGE.setResizable(true);
         });
     }
 
     public static void setResizable(boolean isResizable) { //Some scenes shouldn't be resized, this enables that.
-        OUTER_STAGE.setResizable(isResizable);
+        DISPLAY_STAGE.setResizable(isResizable);
     }
 
     public static void setScene(Scene scene) {
-        OUTER_STAGE.setScene(scene);
+        DISPLAY_STAGE.setScene(scene);
     }
 
     public static void close() {
-        OUTER_STAGE.close();
+        DISPLAY_STAGE.close();
     }
 
-    public static void showAndWait(){
-        OUTER_STAGE.showAndWait();
+    public static void showAndWait() {
+        DISPLAY_STAGE.showAndWait();
     }
-    
+
     public static void show() {
-        OUTER_STAGE.show();
+        DISPLAY_STAGE.show();
     }
 }

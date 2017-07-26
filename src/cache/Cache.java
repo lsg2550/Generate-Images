@@ -19,12 +19,15 @@ public class Cache implements Runnable {
     private final char[] ENGLISH_ALPHABET = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
         'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
         'x', 'y', 'z'};
-    private Object selectedDirectory;
+    private final Object selectedDirectory;
 
     public Cache(Object selectedDirectory) {
         this.selectedDirectory = selectedDirectory;
     }
 
+    /**
+     *
+     */
     @Override
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
@@ -35,8 +38,7 @@ public class Cache implements Runnable {
 
             //Prevents the clearing of the GUI in case the user still wants to use the current directory
             if (selectedDirectory != null) {
-                //Garbage Collection
-                CacheList.cleanup();
+                CacheList.cleanup(); //Garbage Collection
             }
 
             /*Processing*/
@@ -54,8 +56,8 @@ public class Cache implements Runnable {
                         //System.out.println("File Read: " + filePath); //Logging
 
                         for (CacheBuild cacheType : CacheList.getCACHE_LIST()) {
-                            if (cacheType.getArrayListCharIdentifier() == getListDir(file.getName())) {
-                                cacheType.getArrayListOfImages().add(new Image(filePath));
+                            if (cacheType.getCharIdentifier() == getListDir(file.getName())) {
+                                cacheType.getListOfImages().add(new Image(filePath));
                                 cacheTypeAlreadyExists = true;
                                 break;
                             }
@@ -93,7 +95,7 @@ public class Cache implements Runnable {
                 return;
             }
 
-            /*Builds*/
+            //Builds
             CacheList.getCACHE_LIST().stream().forEach((cacheType) -> {
                 cacheType.buildCacheType();
                 Platform.runLater(() -> {

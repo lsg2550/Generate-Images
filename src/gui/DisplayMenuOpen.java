@@ -23,8 +23,8 @@ class DisplayMenuOpen {
     private static Scene scene;
 
     //CheckBox
-    private final static CheckBox LOAD_TYPE = new CheckBox("Single/Multiple"),
-            LOAD_TYPE_WINDOW = new CheckBox("Don't Ask Me Again");
+    private final static CheckBox LOAD_TYPE = new CheckBox("Single/Multiple");
+    private final static CheckBox LOAD_TYPE_WINDOW = new CheckBox("Don't Ask Me Again");
 
     protected static void init() {
         //Root

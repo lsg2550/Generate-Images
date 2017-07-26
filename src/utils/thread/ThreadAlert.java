@@ -45,8 +45,7 @@ public class ThreadAlert {
         stackPane.setAlignment(Pos.CENTER);
 
         //Button
-        Button btnInterruptThread = new Button("Yes"),
-                btnKeepThread = new Button("No");
+        Button btnInterruptThread = new Button("Yes"), btnKeepThread = new Button("No");
         btnKeepThread.setOnAction(e -> {
             DisplayStage.close();
         });

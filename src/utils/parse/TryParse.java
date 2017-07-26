@@ -8,22 +8,18 @@ import java.util.List;
  * @author Luis
  */
 public class TryParse {
-
+    
     public static boolean TryListOfFileArray(Object testObject) {
-        try {
-            List<File[]> name = (List<File[]>) testObject;
-            return true;
-        } catch (ClassCastException e) {
-            return false;
+        if (testObject instanceof List) {
+            if (TryFileArray(((List) testObject).get(0))) {
+                return true;
+            }
         }
+        
+        return false;
     }
-
+    
     public static boolean TryFileArray(Object testObject) {
-        try {
-            File[] name = (File[]) testObject;
-            return true;
-        } catch (ClassCastException e) {
-            return false;
-        }
+        return testObject instanceof File[];
     }
 }

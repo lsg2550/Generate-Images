@@ -33,7 +33,7 @@ public class Save {
 
             if (saveFile != null) {
                 FILE_CHOOSER.setInitialDirectory(saveFile.getParentFile());
-                
+
                 ImageIO.write(SwingFXUtils.fromFXImage(image, null),
                         saveFile.toString().substring(saveFile.toString().length() - 3),
                         saveFile

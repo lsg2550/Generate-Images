@@ -4,7 +4,8 @@ import gui.DisplayGUIPreviewImageView;
 import gui.DisplayStage;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -27,34 +28,35 @@ import javafx.scene.layout.VBox;
  */
 class CacheBuild {
 
-    private ArrayList<Image> arrayListOfImages; //ArrayList of Images of CacheBuild
-    private char arrayListCharIdentifier; //ID of CacheBuild
+    private List<Image> listOfImages; //List of Images of CacheBuild
+    private char listIdentifier; //ID of CacheBuild
     private VBox root = new VBox(); //VBox Scene from main GUI
 
-    protected CacheBuild(File[] listOfImages) {
-        arrayListOfImages = new ArrayList<>(listOfImages.length);
+    protected CacheBuild(File[] arrayOfImages) {
+        listOfImages = new LinkedList<>();
 
-        for (File image : listOfImages) {
+        for (File image : arrayOfImages) {
             try {
-                arrayListOfImages.add(new Image(image.toURI().toURL().toExternalForm()));
+                listOfImages.add(new Image(image.toURI().toURL().toExternalForm()));
             } catch (MalformedURLException ex) {
+                ex.printStackTrace();
             }
         }
     }
 
     protected CacheBuild(char arrayListCharIdentifier, Image image) {
-        this.arrayListCharIdentifier = arrayListCharIdentifier;
-        arrayListOfImages = new ArrayList<>(150);
-        arrayListOfImages.add(image);
+        this.listIdentifier = arrayListCharIdentifier;
+        listOfImages = new LinkedList<>();
+        listOfImages.add(image); //Initial Image
     }
 
     protected void buildCacheType() {
         //ImageView
-        ImageView imageView = new ImageView(arrayListOfImages.get(0));
+        ImageView imageView = new ImageView(listOfImages.get(0));
         imageView.setFitWidth(250);
         imageView.setFitHeight(250);
 
-        if (arrayListOfImages.size() == 1) {
+        if (listOfImages.size() == 1) {
             //CheckBox
             CheckBox enableDisable = new CheckBox();
             enableDisable(imageView, enableDisable);
@@ -64,13 +66,13 @@ class CacheBuild {
             //Button
             Button extend = new Button("Extend");
             extend.setPadding(new Insets(0, 5, 0, 5));
-            extendAndCreateSubMenu(arrayListOfImages, extend);
+            extendAndCreateSubMenu(listOfImages, extend);
 
             root.getChildren().addAll(imageView, extend);
         }
 
         root.setAlignment(Pos.CENTER);
-        nullImages();
+        nullifyImages();
     }
 
     protected CacheBuild(Image image) { //For the submenu & savemenu
@@ -111,7 +113,7 @@ class CacheBuild {
         enableDisable.setSelected(true);
     }
 
-    private void extendAndCreateSubMenu(ArrayList<Image> arrayOfImageSet, Button extend) {
+    private void extendAndCreateSubMenu(List<Image> arrayOfImageSet, Button extend) {
         //SP
         ScrollPane sp = new ScrollPane();
         sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -142,14 +144,13 @@ class CacheBuild {
     }
 
     //Garbage Collection Purposes
-    private void nullImages() {
-        arrayListOfImages.stream().forEach((image) -> {
+    private void nullifyImages() {
+        listOfImages.stream().forEach((image) -> {
             image = null;
         });
 
-        arrayListOfImages.trimToSize();
-        arrayListOfImages.clear();
-        arrayListOfImages = null;
+        listOfImages.clear();
+        listOfImages = null;
     }
 
     //Accessors
@@ -157,12 +158,12 @@ class CacheBuild {
         return root;
     }
 
-    protected char getArrayListCharIdentifier() {
-        return arrayListCharIdentifier;
+    protected char getCharIdentifier() {
+        return listIdentifier;
     }
 
-    protected ArrayList<Image> getArrayListOfImages() {
-        return arrayListOfImages;
+    protected List<Image> getListOfImages() {
+        return listOfImages;
     }
 
 }

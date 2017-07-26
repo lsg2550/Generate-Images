@@ -1,8 +1,9 @@
 package gui;
 
 import cache.CacheList;
-import cache.DrawPreview;
-import java.util.ArrayList;
+import utils.drawing.DrawPreview;
+import java.util.LinkedList;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -67,12 +68,12 @@ class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKA
 
         //Handlers
         save.setOnAction(e -> {
-            Save.saveFile(DrawPreview.draw(new ArrayList<>(updateObservableList(images))));
+            Save.saveFile(DrawPreview.draw(new LinkedList<>(updateObservableList(images))));
             DisplayStage.close();
         });
         preview.setOnAction(e -> {
             StackPane sp = new StackPane();
-            sp.getChildren().add(new ImageView(DrawPreview.draw(new ArrayList<>(updateObservableList(images)))));
+            sp.getChildren().add(new ImageView(DrawPreview.draw(new LinkedList<>(updateObservableList(images)))));
 
             Scene scene = new Scene(sp, 800, 600);
             Stage stage = new Stage();
@@ -96,7 +97,7 @@ class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKA
             VIEW_HBOX.getChildren().clear(); //Clear Past Images
 
             //Create Clones
-            images = FXCollections.observableArrayList(cloneAndReplace(CacheList.getSELECTED_IMAGES()));
+            images = FXCollections.observableList(cloneAndReplace(CacheList.getSELECTED_IMAGES()));
             System.out.println("Size of List: " + images.size()); //Logging
 
             //Iterate and place the clones into the GUI
@@ -164,8 +165,8 @@ class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKA
      *
      * @toBeCloned - the images that the user has selected
      */
-    private static ArrayList<ImageView> cloneAndReplace(ArrayList<ImageView> toBeCloned) {
-        ArrayList<ImageView> temp = new ArrayList<>(toBeCloned.size());
+    private static List<ImageView> cloneAndReplace(List<ImageView> toBeCloned) {
+        List<ImageView> temp = new LinkedList<>();
 
         toBeCloned.forEach((imageView) -> {
             try {

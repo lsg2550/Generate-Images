@@ -1,8 +1,10 @@
 package cache;
 
+import utils.drawing.DrawPreview;
 import gui.DisplayGUICenterScrollPane;
 import gui.DisplayGUIPreviewImageView;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,11 +15,11 @@ import javafx.scene.image.ImageView;
  */
 public class CacheList {
 
-    //ArrayList of directories and their menus - Default 26 as the program is meant for folders a-z
-    private static final ArrayList<CacheBuild> CACHE_LIST = new ArrayList<CacheBuild>(26);
+    //List of directories and their menus 
+    private static final List<CacheBuild> CACHE_LIST = new LinkedList<CacheBuild>();
 
-    //ArrayList of Selected Images
-    private static final ArrayList<ImageView> SELECTED_IMAGES = new ArrayList<ImageView>(30);
+    //List of Selected Images
+    private static final List<ImageView> SELECTED_IMAGES = new LinkedList<ImageView>();
 
     protected static void cleanup() {
         Platform.runLater(() -> {
@@ -45,11 +47,11 @@ public class CacheList {
         return DrawPreview.draw(SELECTED_IMAGES);
     }
 
-    protected static ArrayList<CacheBuild> getCACHE_LIST() {
+    protected static List<CacheBuild> getCACHE_LIST() {
         return CACHE_LIST;
     }
 
-    public static ArrayList<ImageView> getSELECTED_IMAGES() {
+    public static List<ImageView> getSELECTED_IMAGES() {
         return SELECTED_IMAGES;
     }
 

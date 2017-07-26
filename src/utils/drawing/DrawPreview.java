@@ -1,6 +1,6 @@
-package cache;
+package utils.drawing;
 
-import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
  */
 public class DrawPreview {
 
-    public static Image draw(ArrayList<ImageView> SELECTED_IMAGES) {
+    public static Image draw(List<ImageView> SELECTED_IMAGES) {
         if (!SELECTED_IMAGES.isEmpty()) {
             Canvas CV = new Canvas(SELECTED_IMAGES.get(0).getImage().getWidth(),
                     SELECTED_IMAGES.get(0).getImage().getHeight());

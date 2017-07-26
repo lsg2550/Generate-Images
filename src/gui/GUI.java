@@ -31,7 +31,6 @@ class GUI { //NOT USED BY CLASSES OUTSIDE PACKAGE
         primaryStage.getIcons().add(Icon.ICON);
         //primaryStage.setResizable(false);
         primaryStage.setScene(scene);
-        primaryStage.show();
     }
 
 }

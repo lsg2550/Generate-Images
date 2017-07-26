@@ -2,8 +2,8 @@ package utils.io;
 
 import gui.DisplayGUIText;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import javafx.stage.DirectoryChooser;
 import utils.settings.Settings;
@@ -20,47 +20,54 @@ public class Read {
     public static Object readDirectory() {
         if (Settings.loadType) { //Single
             File selectedDirectory = DIRECTORY_CHOOSER.showDialog(null);
-            File[] selectedDirectoryFiles = null;
 
-            if (selectedDirectory != null /*Directory Selected*/ && !selectedDirectory.getAbsolutePath().equals(DisplayGUIText.getDirectoryText()) /*Directory is not the current one*/) {
-                DIRECTORY_CHOOSER.setInitialDirectory(selectedDirectory.getParentFile());
-                DisplayGUIText.setDirectoryText(selectedDirectory.getAbsolutePath());
-
-                selectedDirectoryFiles = selectedDirectory.listFiles((File file, String name)
-                        -> name.toLowerCase().endsWith(".png")
-                        || name.toLowerCase().endsWith(".jpg")
-                );
-            }
-
-            return selectedDirectoryFiles;
-        } else { //Multiple
-            File selectedDirectory = DIRECTORY_CHOOSER.showDialog(null);
-            List<File> files;
-            List<File[]> readImages = new ArrayList<>(10);
-
-            if (selectedDirectory != null) {
-                files = Arrays.asList(selectedDirectory.listFiles());
-            } else {
-                files = null;
-            }
-
-            if (files != null) {
-                DIRECTORY_CHOOSER.setInitialDirectory(files.get(0).getParentFile().getParentFile());
-                DisplayGUIText.setDirectoryText(files.get(0).getParentFile().getAbsolutePath());
-
-                files.stream().filter((file) -> (file.isDirectory())).forEachOrdered((file) -> {
-                    File[] temp = file.listFiles((File filesFromDirectory, String name)
-                            -> name.toLowerCase().endsWith(".png")
-                            || name.toLowerCase().endsWith(".jpg")
-                    );
-                    if (!Arrays.asList(temp).isEmpty()) {
-                        readImages.add(temp);
-                    }
-                });
-            } else {
+            if (selectedDirectory == null) {
                 return null;
             }
 
+            //Reading
+            File[] selectedDirectoryFiles = null;
+            if (!selectedDirectory.getAbsolutePath().equals(DisplayGUIText.getDirectoryText())) {
+                selectedDirectoryFiles = selectedDirectory.listFiles((File file, String name)
+                        -> name.toLowerCase().endsWith(".png")
+                        || name.toLowerCase().endsWith(".jpg")
+                        || name.toLowerCase().endsWith(".jpeg")
+                );
+            }
+
+            //GUI
+            DIRECTORY_CHOOSER.setInitialDirectory(selectedDirectory.getParentFile());
+            DisplayGUIText.setDirectoryText(selectedDirectory.getAbsolutePath());
+
+            //Return
+            return selectedDirectoryFiles;
+        } else { //Multiple
+            File selectedDirectory = DIRECTORY_CHOOSER.showDialog(null);
+
+            if (selectedDirectory == null) {
+                return null;
+            }
+
+            //Reading
+            List<File> files = Arrays.asList(selectedDirectory.listFiles());
+            List<File[]> readImages = new LinkedList<>();
+            files.stream().filter((file) -> (file.isDirectory())).forEachOrdered((file) -> {
+                File[] temp = file.listFiles((File filesFromDirectory, String name)
+                        -> name.toLowerCase().endsWith(".png")
+                        || name.toLowerCase().endsWith(".jpg")
+                        || name.toLowerCase().endsWith(".jpeg")
+                );
+
+                if (!Arrays.asList(temp).isEmpty()) {
+                    readImages.add(temp);
+                }
+            });
+
+            //GUI
+            DIRECTORY_CHOOSER.setInitialDirectory(files.get(0).getParentFile().getParentFile());
+            DisplayGUIText.setDirectoryText(files.get(0).getParentFile().getAbsolutePath());
+
+            //Return
             return readImages;
         }
     }

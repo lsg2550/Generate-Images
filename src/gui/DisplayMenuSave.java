@@ -1,6 +1,7 @@
 package gui;
 
 import cache.CacheList;
+import java.util.ArrayList;
 import utils.drawing.DrawPreview;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,6 +60,8 @@ class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKA
 
         //Misc
         save.setMaxSize(60, 20);
+        DisplayGUIPreviewStage dgps = new DisplayGUIPreviewStage();
+        dgps.init();
 
         //Children
         SCROLLPANE.setContent(VIEW_HBOX);
@@ -68,18 +71,15 @@ class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKA
 
         //Handlers
         save.setOnAction(e -> {
-            Save.saveFile(DrawPreview.draw(new LinkedList<>(updateObservableList(images))));
+            Save.saveFile(DrawPreview.draw(new ArrayList<>(updateObservableList(images))));
             DisplayStage.close();
         });
-        preview.setOnAction(e -> {
-            StackPane sp = new StackPane();
-            sp.getChildren().add(new ImageView(DrawPreview.draw(new LinkedList<>(updateObservableList(images)))));
 
-            Scene scene = new Scene(sp, 800, 600);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.show();
+        preview.setOnAction(e -> {
+            dgps.setPreviewImage(DrawPreview.draw(new ArrayList<>(updateObservableList(images))));
+            dgps.show();
         });
+
         cancel.setOnAction(e -> {
             DisplayStage.close();
         });
@@ -166,7 +166,7 @@ class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKA
      * @toBeCloned - the images that the user has selected
      */
     private static List<ImageView> cloneAndReplace(List<ImageView> toBeCloned) {
-        List<ImageView> temp = new LinkedList<>();
+        List<ImageView> temp = new ArrayList<>(toBeCloned.size());
 
         toBeCloned.forEach((imageView) -> {
             try {
@@ -176,5 +176,26 @@ class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKA
         });
 
         return temp;
+    }
+
+    private static class DisplayGUIPreviewStage {
+
+        private final StackPane sp = new StackPane();
+        private final ImageView iv = new ImageView();
+        private final Scene scene = new Scene(sp, 800, 600);
+        private final Stage stage = new Stage();
+
+        void init() {
+            sp.getChildren().add(iv);
+            stage.setScene(scene);
+        }
+
+        void setPreviewImage(Image image) {
+            iv.setImage(image);
+        }
+
+        void show() {
+            stage.show();
+        }
     }
 }

@@ -2,11 +2,15 @@ package gui;
 
 import cache.CacheList;
 import java.util.ArrayList;
+import java.util.Iterator;
 import utils.drawing.DrawPreview;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,18 +25,19 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import utils.cloning.ImageClone;
 import utils.io.Save;
+import utils.parsing.TryParse;
 
 /**
  *
  * @author Luis
  */
-class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKAGE
+class MenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
     private static Scene saveScene;
     private final static HBox VIEW_HBOX = new HBox(2.5);
     private final static ScrollPane SCROLLPANE = new ScrollPane(VIEW_HBOX);
 
-    protected static void init() {
+    static void init() {
         //Main Container
         VBox root = new VBox(10.0);
 
@@ -60,7 +65,7 @@ class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKA
 
         //Misc
         save.setMaxSize(60, 20);
-        DisplayGUIPreviewStage dgps = new DisplayGUIPreviewStage();
+        GUIPreviewStage dgps = new GUIPreviewStage();
         dgps.init();
 
         //Children
@@ -83,29 +88,24 @@ class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKA
         cancel.setOnAction(e -> {
             DisplayStage.close();
         });
+
+        //Listeners
+        iLayer.addListener((MapChangeListener.Change<? extends Integer, ? extends ImageView> change) -> {
+            System.out.println("Hello from Map!");
+        });
     }
 
     //Create Clones
     private static ObservableList<ImageView> images;
-    private static ObservableList<Integer> layer;
+
+    //Create Layers
+    private static ObservableMap<Integer, ImageView> iLayer = FXCollections.observableHashMap();
 
     //Show Save Menu
-    protected static void show() {
+    static void show() {
         //Grab Images
-        if (!CacheList.getSELECTED_IMAGES().isEmpty()) {
-
-            VIEW_HBOX.getChildren().clear(); //Clear Past Images
-
-            //Create Clones
-            images = FXCollections.observableList(cloneAndReplace(CacheList.getSELECTED_IMAGES()));
-            System.out.println("Size of List: " + images.size()); //Logging
-
-            //Iterate and place the clones into the GUI
-            images.forEach((imageView) -> {
-                VIEW_HBOX.getChildren().add(getList(imageView, images.indexOf(imageView)));
-            });
-
-        }
+        images = null;
+        grabImages();
 
         //Show
         DisplayStage.setResizable(false);
@@ -113,16 +113,28 @@ class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKA
         DisplayStage.show();
     }
 
-    private static ObservableList<ImageView> updateObservableList(ObservableList<ImageView> oldList) {
-        ObservableList<ImageView> newList = FXCollections.observableArrayList();
+    private static void grabImages() {
+        if (!CacheList.getSELECTED_IMAGES().isEmpty()) {
+            //Clear Past Images
+            VIEW_HBOX.getChildren().clear();
 
-        for (ImageView imageView : oldList) {
-            if (!imageView.isDisabled()) {
-                newList.add(imageView);
+            if (images == null) {
+                images = FXCollections.observableArrayList(cloneAndReplace(CacheList.getSELECTED_IMAGES()));
+                images.forEach((imageView) -> {
+                    iLayer.put(images.indexOf(imageView), imageView); //Places into Map
+                });
+            } else {
+                images.clear();
+                iLayer.forEach((t, u) -> {
+                    images.add(u);
+                });
             }
-        }
 
-        return newList;
+            //Iterate and place the clones into the GUI
+            images.forEach((imageView) -> {
+                VIEW_HBOX.getChildren().add(getList(imageView, images.indexOf(imageView)));
+            });
+        }
     }
 
     //Generates a VBox that contains a checkbox and the imageviews placement in the selected arraylist
@@ -150,6 +162,19 @@ class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKA
         innerVB.getChildren().addAll(imageView, innerHB);
 
         //Handlers
+        orderInLayer.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.equals("") && TryParse.TryInt(newValue) != -1) {
+                int temp = TryParse.TryInt(newValue); //New Value
+
+                if (iLayer.containsKey(temp)) {
+                    if (!iLayer.get(temp).isDisabled()) {
+                        swapMapValues(iLayer, temp, layer, imageView);
+                        grabImages();
+                    }
+                }
+            }
+        });
+
         checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             orderInLayer.setDisable(newValue);
             imageView.setDisable(newValue);
@@ -158,10 +183,22 @@ class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKA
         return innerVB;
     }
 
+    private static List<ImageView> updateObservableList(List<ImageView> oldList) {
+        List<ImageView> newList = new ArrayList(oldList.size());
+
+        for (ImageView imageView : oldList) {
+            if (!imageView.isDisabled()) {
+                newList.add(imageView);
+            }
+        }
+
+        return newList;
+    }
+
     /**
      * Method to clone images - due to Java's use of references, loading images
-     * that are in the main GUI only cause them to disappear but load here. So I
-     * am forced to clone.
+     * that are in the main GUI only cause them to disappear when loading them
+     * here. So I am forced to clone them to prevent this.
      *
      * @toBeCloned - the images that the user has selected
      */
@@ -178,7 +215,13 @@ class DisplayMenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKA
         return temp;
     }
 
-    private static class DisplayGUIPreviewStage {
+    private static void swapMapValues(Map<Integer, ImageView> map, Integer newKey, Integer oldKey, ImageView newValue) {
+        ImageView temp = map.get(newKey);
+        map.replace(newKey, newValue);
+        map.replace(oldKey, temp);
+    }
+
+    private static class GUIPreviewStage {
 
         private final StackPane sp = new StackPane();
         private final ImageView iv = new ImageView();

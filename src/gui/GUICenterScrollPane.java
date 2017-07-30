@@ -9,12 +9,12 @@ import javafx.scene.layout.HBox;
  *
  * @author Luis
  */
-public class DisplayGUICenterScrollPane { //USED BY CLASSES OUTSIDE PACKAGE
+public class GUICenterScrollPane { //USED BY CLASSES OUTSIDE PACKAGE
 
     private final static HBox HBOX_INSIDE_SCROLLPANE = new HBox(2.5);
     private static final ScrollPane SCROLLPANE_HOLDING_HBOX = new ScrollPane(HBOX_INSIDE_SCROLLPANE);
 
-    protected static void init() {
+    static void init() {
         //HBox inside Scrollpane
         HBOX_INSIDE_SCROLLPANE.setAlignment(Pos.CENTER);
         HBOX_INSIDE_SCROLLPANE.setMaxHeight(5);
@@ -26,7 +26,7 @@ public class DisplayGUICenterScrollPane { //USED BY CLASSES OUTSIDE PACKAGE
     }
 
     /*Accessible only by inside package - GUI purposes*/
-    protected static ScrollPane getSCROLLPANE_HOLDING_HBOX() {
+    static ScrollPane getSCROLLPANE_HOLDING_HBOX() {
         return SCROLLPANE_HOLDING_HBOX;
     }
 

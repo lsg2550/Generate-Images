@@ -12,11 +12,11 @@ import javafx.scene.text.TextAlignment;
  *
  * @author Luis
  */
-class DisplayMenuAbout { //NOT USED BY CLASSES OUTSIDE PACKAGE
+class MenuAbout { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
     private static Scene scene;
 
-    protected static void init() {
+    static void init() {
         //Root
         VBox root = new VBox();
         root.setAlignment(Pos.CENTER);
@@ -39,7 +39,7 @@ class DisplayMenuAbout { //NOT USED BY CLASSES OUTSIDE PACKAGE
         scene = new Scene(root, 150, 100);
     }
 
-    protected static void show() {
+    static void show() {
         DisplayStage.setResizable(false);
         DisplayStage.setScene(scene);
         DisplayStage.show();

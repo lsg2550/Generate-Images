@@ -12,7 +12,7 @@ public class DisplayStage { //USED BY CLASSES OUTSIDE PACKAGE
 
     private final static Stage DISPLAY_STAGE = new Stage();
 
-    protected static void init() {
+    static void init() {
         DISPLAY_STAGE.getIcons().add(Icon.ICON);
         DISPLAY_STAGE.setResizable(true);
 

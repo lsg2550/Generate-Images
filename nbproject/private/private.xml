@@ -2,11 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group name="NetBeansProjects"/>
         <group>
             <file>file:/C:/Users/Luis/Documents/NetBeansProjects/GenerateImages/src/cache/CacheSaving.java</file>
             <file>file:/C:/Users/Luis/Documents/NetBeansProjects/GenerateImages/src/gui/DisplayMenuSave.java</file>
         </group>
-        <group name="Personal Project"/>
+        <group name="NetBeansProjects"/>
+        <group name="Personal Project">
+            <file>file:/C:/Users/Luis/Documents/NetBeansProjects/Personal%20Project/GenerateImages/src/gui/MenuSave.java</file>
+            <file>file:/C:/Users/Luis/Documents/NetBeansProjects/Personal%20Project/GenerateImages/src/cache/Cache.java</file>
+            <file>file:/C:/Users/Luis/Documents/NetBeansProjects/Personal%20Project/GenerateImages/src/utils/parsing/TryParse.java</file>
+        </group>
     </open-files>
 </project-private>

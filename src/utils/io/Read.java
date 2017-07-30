@@ -1,6 +1,6 @@
 package utils.io;
 
-import gui.DisplayGUIText;
+import gui.GUIText;
 import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -27,7 +27,7 @@ public class Read {
 
             //Reading
             File[] selectedDirectoryFiles = null;
-            if (!selectedDirectory.getAbsolutePath().equals(DisplayGUIText.getDirectoryText())) {
+            if (!selectedDirectory.getAbsolutePath().equals(GUIText.getDirectoryText())) {
                 selectedDirectoryFiles = selectedDirectory.listFiles((File file, String name)
                         -> name.toLowerCase().endsWith(".png")
                         || name.toLowerCase().endsWith(".jpg")
@@ -37,7 +37,7 @@ public class Read {
 
             //GUI
             DIRECTORY_CHOOSER.setInitialDirectory(selectedDirectory.getParentFile());
-            DisplayGUIText.setDirectoryText(selectedDirectory.getAbsolutePath());
+            GUIText.setDirectoryText(selectedDirectory.getAbsolutePath());
 
             //Return
             return selectedDirectoryFiles;
@@ -65,7 +65,7 @@ public class Read {
 
             //GUI
             DIRECTORY_CHOOSER.setInitialDirectory(files.get(0).getParentFile().getParentFile());
-            DisplayGUIText.setDirectoryText(files.get(0).getParentFile().getAbsolutePath());
+            GUIText.setDirectoryText(files.get(0).getParentFile().getAbsolutePath());
 
             //Return
             return readImages;

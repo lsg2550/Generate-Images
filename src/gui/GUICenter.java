@@ -12,16 +12,16 @@ import javafx.scene.text.Text;
  *
  * @author Luis
  */
-class DisplayGUICenter { //NOT USED BY CLASSES OUTSIDE PACKAGE
+class GUICenter { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
     //UI
     private static final VBox GENERATED_VBOX = new VBox(),
             CENTER_ALL_CONTAINER_VBOX = new VBox();
 
     //Initialize
-    protected static void init() {
+    static void init() {
         //Image Preview VBox
-        GENERATED_VBOX.getChildren().addAll(new Text("Image To Be Generated"), DisplayGUIPreviewImageView.getPREVIEW_IMAGEVIEW());
+        GENERATED_VBOX.getChildren().addAll(new Text("Image To Be Generated"), GUIPreviewImageView.getPREVIEW_IMAGEVIEW());
         GENERATED_VBOX.setAlignment(Pos.CENTER);
         GENERATED_VBOX.setMinSize(250, 250);
 
@@ -39,8 +39,8 @@ class DisplayGUICenter { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
         //ImageView
         GENERATED_VBOX.setOnMouseClicked(e -> {
-            if (DisplayGUIPreviewImageView.containsImage()) {
-                iv.setImage(DisplayGUIPreviewImageView.getImageFromImageView());
+            if (GUIPreviewImageView.containsImage()) {
+                iv.setImage(GUIPreviewImageView.getImageFromImageView());
                 DisplayStage.setScene(scene);
                 DisplayStage.show();
             }
@@ -49,15 +49,16 @@ class DisplayGUICenter { //NOT USED BY CLASSES OUTSIDE PACKAGE
         //Container for all nodes
         CENTER_ALL_CONTAINER_VBOX.heightProperty().isEqualTo(CENTER_ALL_CONTAINER_VBOX.getScene().getHeight(), 5);
         CENTER_ALL_CONTAINER_VBOX.widthProperty().isEqualTo(CENTER_ALL_CONTAINER_VBOX.getScene().getWidth(), 5);
-        CENTER_ALL_CONTAINER_VBOX.getChildren().addAll(DisplayGUICenterScrollPane.getSCROLLPANE_HOLDING_HBOX(), GENERATED_VBOX);
+        CENTER_ALL_CONTAINER_VBOX.getChildren().addAll(GUICenterScrollPane.getSCROLLPANE_HOLDING_HBOX(), GENERATED_VBOX);
         CENTER_ALL_CONTAINER_VBOX.setAlignment(Pos.CENTER);
     }
 
-    protected static VBox getGENERATED_VBOX() {
+    static VBox getGENERATED_VBOX() {
         return GENERATED_VBOX;
     }
 
-    protected static VBox getCENTER_ALL_CONTAINER_VBOX() {
+    static VBox getCENTER_ALL_CONTAINER_VBOX() {
         return CENTER_ALL_CONTAINER_VBOX;
     }
+
 }

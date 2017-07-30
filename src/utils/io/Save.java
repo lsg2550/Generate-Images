@@ -1,6 +1,6 @@
 package utils.io;
 
-import gui.DisplayGUIText;
+import gui.GUIText;
 import java.io.File;
 import java.io.IOException;
 import javafx.embed.swing.SwingFXUtils;
@@ -41,7 +41,7 @@ public class Save {
             }
 
         } catch (NullPointerException | IOException | IllegalArgumentException ex) {
-            DisplayGUIText.setUpdateText("Nothing to Save!");
+            GUIText.setUpdateText("Nothing to Save!");
         }
     }
 }

@@ -6,7 +6,7 @@ import javafx.scene.control.ProgressBar;
  *
  * @author Luis
  */
-public class DisplayGUIProgressBar { //USED BY CLASSES OUTSIDE PACKAGE
+public class GUIProgressBar { //USED BY CLASSES OUTSIDE PACKAGE
 
     private static final ProgressBar PROGRESS_BAR = new ProgressBar(0);
 

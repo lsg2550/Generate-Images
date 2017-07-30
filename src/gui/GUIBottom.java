@@ -7,16 +7,16 @@ import javafx.scene.layout.HBox;
  *
  * @author Luis
  */
-class DisplayGUIBottom { //NOT USED BY CLASSES OUTSIDE PACKAGE
+class GUIBottom { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
     private static final HBox BOTTOM_HBOX = new HBox(5);
 
-    protected static void init() {
-        BOTTOM_HBOX.getChildren().addAll(DisplayGUIProgressBar.getpBar(), DisplayGUIText.getUpdateTextNode());
+    static void init() {
+        BOTTOM_HBOX.getChildren().addAll(GUIProgressBar.getpBar(), GUIText.getUpdateTextNode());
         BOTTOM_HBOX.setAlignment(Pos.CENTER);
     }
 
-    protected static HBox getHb() {
+    static HBox getHb() {
         return BOTTOM_HBOX;
     }
 }

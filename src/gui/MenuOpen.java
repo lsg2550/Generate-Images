@@ -17,7 +17,7 @@ import utils.settings.Settings;
  *
  * @author Luis
  */
-class DisplayMenuOpen {
+class MenuOpen {
 
     //Scene
     private static Scene scene;
@@ -26,7 +26,7 @@ class DisplayMenuOpen {
     private final static CheckBox LOAD_TYPE = new CheckBox("Single/Multiple");
     private final static CheckBox LOAD_TYPE_WINDOW = new CheckBox("Don't Ask Me Again");
 
-    protected static void init() {
+    static void init() {
         //Root
         BorderPane root = new BorderPane();
 
@@ -68,7 +68,7 @@ class DisplayMenuOpen {
         scene = new Scene(root, 350, 100);
     }
 
-    protected static void show() {
+    static void show() {
         //CheckBox Initialize
         LOAD_TYPE.setSelected(Settings.loadType);
         LOAD_TYPE_WINDOW.setSelected(!Settings.loadTypeWindow);

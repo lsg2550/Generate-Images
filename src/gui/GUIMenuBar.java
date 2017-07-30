@@ -11,18 +11,17 @@ import utils.thread.BuildThread;
  *
  * @author Luis
  */
-class DisplayGUIMenuBar { //NOT USED BY CLASSES OUTSIDE PACKAGE
+class GUIMenuBar { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
     //Menu
     private static final MenuBar MENU_BAR = new MenuBar();
 
-    protected static void init() {
+    static void init() {
         //Menu
-        Menu file = new Menu("File"),
-                help = new Menu("Help");
+        Menu file = new Menu("File"), help = new Menu("Help");
 
         //Menu Children
-        MENU_BAR.getMenus().addAll(file, help, DisplayGUIText.getDirectoryTextMenu());
+        MENU_BAR.getMenus().addAll(file, help, GUIText.getDirectoryTextMenu());
 
         //MenuItem
         MenuItem open = new MenuItem("Open"), //File Menu
@@ -38,12 +37,12 @@ class DisplayGUIMenuBar { //NOT USED BY CLASSES OUTSIDE PACKAGE
         //Handlers
         open.setOnAction(e -> {
             if (Settings.loadTypeWindow) {
-                DisplayMenuOpen.show();
+                MenuOpen.show();
             }
             BuildThread.runBuild();
         });
         save.setOnAction(e -> {
-            DisplayMenuSave.show(); //Window to display chosen images where user will be able to re-arrange order etc before writing image
+            MenuSave.show(); //Window to display chosen images where user will be able to re-arrange order etc before writing image
             //Save.saveFile(DisplayGUIPreviewImageView.getImageFromImageView());
         });
         exit.setOnAction(e -> {
@@ -51,14 +50,14 @@ class DisplayGUIMenuBar { //NOT USED BY CLASSES OUTSIDE PACKAGE
             System.exit(0);
         });
         about.setOnAction(e -> {
-            DisplayMenuAbout.show();
+            MenuAbout.show();
         });
         settings.setOnAction(e -> {
-            DisplayMenuSettings.show();
+            MenuSettings.show();
         });
     }
 
-    protected static MenuBar getMENU_BAR() {
+    static MenuBar getMENU_BAR() {
         return MENU_BAR;
     }
 

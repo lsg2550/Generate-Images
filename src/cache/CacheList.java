@@ -1,9 +1,9 @@
 package cache;
 
 import utils.drawing.DrawPreview;
-import gui.DisplayGUICenterScrollPane;
-import gui.DisplayGUIPreviewImageView;
-import java.util.LinkedList;
+import gui.GUICenterScrollPane;
+import gui.GUIPreviewImageView;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
@@ -16,38 +16,38 @@ import javafx.scene.image.ImageView;
 public class CacheList {
 
     //List of directories and their menus 
-    private static final List<CacheBuild> CACHE_LIST = new LinkedList<CacheBuild>();
+    private static final List<CacheBuild> CACHE_LIST = new ArrayList<CacheBuild>(26);
 
     //List of Selected Images
-    private static final List<ImageView> SELECTED_IMAGES = new LinkedList<ImageView>();
+    private static final List<ImageView> SELECTED_IMAGES = new ArrayList<ImageView>(50);
 
-    protected static void cleanup() {
+    static void cleanup() {
         Platform.runLater(() -> {
-            DisplayGUIPreviewImageView.setImageForImageView(null);
-            DisplayGUICenterScrollPane.clearHBox();
+            GUIPreviewImageView.setImageForImageView(null);
+            GUICenterScrollPane.clearHBox();
         });
 
         SELECTED_IMAGES.clear();
         CACHE_LIST.clear();
     }
 
-    protected static void remove(ImageView ivToRemove) {
+    static void remove(ImageView ivToRemove) {
         SELECTED_IMAGES.remove(ivToRemove);
     }
 
-    protected static void add(ImageView ivToAdd) {
+    static void add(ImageView ivToAdd) {
         SELECTED_IMAGES.add(ivToAdd);
     }
 
-    protected static void clear() {
+    static void clear() {
         SELECTED_IMAGES.clear();
     }
 
-    public static Image draw() {
+    static Image draw() {
         return DrawPreview.draw(SELECTED_IMAGES);
     }
 
-    protected static List<CacheBuild> getCACHE_LIST() {
+    static List<CacheBuild> getCACHE_LIST() {
         return CACHE_LIST;
     }
 

@@ -14,7 +14,7 @@ import utils.settings.Settings;
  *
  * @author Luis
  */
-class DisplayMenuSettings {
+class MenuSettings {
 
     //Scene
     private static Scene scene;
@@ -23,7 +23,7 @@ class DisplayMenuSettings {
     private final static CheckBox LOAD_TYPE = new CheckBox("Single/Multiple");
     private final static CheckBox LOAD_TYPE_WINDOW = new CheckBox("Show Load Type Window");
 
-    protected static void init() {
+    static void init() {
         //Root
         VBox root = new VBox();
         root.setAlignment(Pos.TOP_CENTER);
@@ -53,7 +53,7 @@ class DisplayMenuSettings {
         scene = new Scene(root, 250, 75);
     }
 
-    protected static void show() {
+    static void show() {
         //CheckBox Initialize
         LOAD_TYPE.setSelected(Settings.loadType);
         LOAD_TYPE_WINDOW.setSelected(Settings.loadTypeWindow);

@@ -11,25 +11,18 @@ import javafx.stage.Stage;
  */
 class GUI { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
-    private final Stage primaryStage;
-
-    GUI(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-        gui();
-    }
-
-    private void gui() {
+    static void gui(Stage primaryStage) {
         //UI
         BorderPane borderPane = new BorderPane();
-        borderPane.setTop(DisplayGUIMenuBar.getMENU_BAR());
-        borderPane.setCenter(DisplayGUICenter.getCENTER_ALL_CONTAINER_VBOX());
-        borderPane.setBottom(DisplayGUIBottom.getHb());
+        borderPane.setTop(GUIMenuBar.getMENU_BAR());
+        borderPane.setCenter(GUICenter.getCENTER_ALL_CONTAINER_VBOX());
+        borderPane.setBottom(GUIBottom.getHb());
 
         //Scene & Stage
         Scene scene = new Scene(borderPane, 800, 600);
         primaryStage.setTitle("Generate Images");
         primaryStage.getIcons().add(Icon.ICON);
-        //primaryStage.setResizable(false);
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
     }
 

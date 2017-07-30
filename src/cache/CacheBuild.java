@@ -1,9 +1,10 @@
 package cache;
 
-import gui.DisplayGUIPreviewImageView;
+import gui.GUIPreviewImageView;
 import gui.DisplayStage;
 import java.io.File;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javafx.beans.value.ChangeListener;
@@ -32,25 +33,28 @@ class CacheBuild {
     private char listIdentifier; //ID of CacheBuild
     private VBox root = new VBox(); //VBox Scene from main GUI
 
-    protected CacheBuild(File[] arrayOfImages) {
-        listOfImages = new LinkedList<>();
+    CacheBuild(File[] arrayOfImages) { //Multiple Directories
+        listOfImages = new ArrayList<>(arrayOfImages.length);
 
-        for (File image : arrayOfImages) {
-            try {
+        try {
+            for (File image : arrayOfImages) {
                 listOfImages.add(new Image(image.toURI().toURL().toExternalForm()));
-            } catch (MalformedURLException ex) {
-                ex.printStackTrace();
             }
+        } catch (MalformedURLException ex) {
         }
     }
 
-    protected CacheBuild(char arrayListCharIdentifier, Image image) {
+    CacheBuild(char arrayListCharIdentifier, Image image) { //Single Directories
         this.listIdentifier = arrayListCharIdentifier;
         listOfImages = new LinkedList<>();
         listOfImages.add(image); //Initial Image
     }
 
-    protected void buildCacheType() {
+    CacheBuild(Image image) { //For the submenu & savemenu
+        buildForSingleImage(image);
+    }
+
+    void buildCacheType() {
         //ImageView
         ImageView imageView = new ImageView(listOfImages.get(0));
         imageView.setFitWidth(250);
@@ -73,10 +77,6 @@ class CacheBuild {
 
         root.setAlignment(Pos.CENTER);
         nullifyImages();
-    }
-
-    protected CacheBuild(Image image) { //For the submenu & savemenu
-        buildForSingleImage(image);
     }
 
     private void buildForSingleImage(Image image) {
@@ -106,7 +106,7 @@ class CacheBuild {
                 imageView.setEffect(null);
             }
 
-            DisplayGUIPreviewImageView.setImageForImageView();
+            GUIPreviewImageView.setImageForImageView(CacheList.draw());
         };
 
         enableDisable.selectedProperty().addListener(changeListenerForCheckBox);
@@ -154,15 +154,15 @@ class CacheBuild {
     }
 
     //Accessors
-    protected VBox getRoot() {
+    VBox getRoot() {
         return root;
     }
 
-    protected char getCharIdentifier() {
+    char getCharIdentifier() {
         return listIdentifier;
     }
 
-    protected List<Image> getListOfImages() {
+    List<Image> getListOfImages() {
         return listOfImages;
     }
 

@@ -7,17 +7,17 @@ import javafx.scene.text.Text;
  *
  * @author Luis
  */
-public class DisplayGUIText { //USED BY CLASSES OUTSIDE PACKAGE
+public class GUIText { //USED BY CLASSES OUTSIDE PACKAGE
 
     private static final Menu DIRECTORY_TEXT = new Menu();
     private static final Text UPDATE_TEXT = new Text();
 
     /*Accessible only by inside package - GUI purposes*/
-    protected static Menu getDirectoryTextMenu() {
+    static Menu getDirectoryTextMenu() {
         return DIRECTORY_TEXT;
     }
 
-    protected static Text getUpdateTextNode() {
+    static Text getUpdateTextNode() {
         return UPDATE_TEXT;
     }
 

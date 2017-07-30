@@ -14,20 +14,20 @@ public class Launcher extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        //Stage Init
-        GUI gui = new GUI(primaryStage);
+        //Primary Stage Init
+        GUI.gui(primaryStage);
         CSS.init(primaryStage.getScene());
 
         //GUI Init
-        DisplayGUICenterScrollPane.init();
-        DisplayGUIPreviewImageView.init();
-        DisplayMenuSettings.init();
-        DisplayGUIMenuBar.init();
-        DisplayGUIBottom.init();
-        DisplayGUICenter.init();
-        DisplayMenuAbout.init();
-        DisplayMenuOpen.init();
-        DisplayMenuSave.init();
+        GUICenterScrollPane.init();
+        GUIPreviewImageView.init();
+        MenuSettings.init();
+        GUIMenuBar.init();
+        GUIBottom.init();
+        GUICenter.init();
+        MenuAbout.init();
+        MenuOpen.init();
+        MenuSave.init();
         DisplayStage.init();
 
         //Utils Init

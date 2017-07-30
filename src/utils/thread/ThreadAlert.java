@@ -2,7 +2,7 @@ package utils.thread;
 
 import assets.icon.Icon;
 import gui.DisplayStage;
-import gui.DisplayGUIText;
+import gui.GUIText;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -50,7 +50,7 @@ public class ThreadAlert {
             DisplayStage.close();
         });
         btnInterruptThread.setOnAction(e -> {
-            DisplayGUIText.setUpdateText("Please Wait For The Process To Safely Halt!");
+            GUIText.setUpdateText("Please Wait For The Process To Safely Halt!");
             BuildThread.interruptThread();
             DisplayStage.close();
         });
@@ -84,7 +84,7 @@ public class ThreadAlert {
     public static void show() {
         DisplayStage.setResizable(false);
         DisplayStage.setScene(scene);
-        DisplayStage.showAndWait();
+        DisplayStage.show();
     }
 
 }

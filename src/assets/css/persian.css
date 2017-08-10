@@ -3,9 +3,13 @@
 }
 
 .scroll-pane{
-    -fx-border-color: black;
+    -fx-border-color: #1c5125;
     -fx-background: #1c5125;
     -fx-control-inner-background: #1c5125;
+}
+
+.scroll-pane:focused{
+    -fx-background-color: #1c5125;
 }
 
 .button{

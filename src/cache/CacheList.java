@@ -44,7 +44,7 @@ public class CacheList {
     }
 
     static Image draw() {
-        return DrawPreview.draw(SELECTED_IMAGES);
+        return DrawPreview.drawFromImageViewList(SELECTED_IMAGES);
     }
 
     static List<CacheBuild> getCACHE_LIST() {

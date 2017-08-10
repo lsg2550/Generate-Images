@@ -14,23 +14,37 @@ import javafx.scene.paint.Color;
  */
 public class DrawPreview {
 
-    public static Image draw(List<ImageView> SELECTED_IMAGES) {
-        if (!SELECTED_IMAGES.isEmpty()) {
-            Canvas CV = new Canvas(SELECTED_IMAGES.get(0).getImage().getWidth(),
-                    SELECTED_IMAGES.get(0).getImage().getHeight());
+    //List of ImageViews
+    public static Image drawFromImageViewList(List<ImageView> images) {
+        if (!images.isEmpty()) {
+            Canvas CV = new Canvas(images.get(0).getImage().getWidth(), images.get(0).getImage().getHeight());
             GraphicsContext GC = CV.getGraphicsContext2D();
 
-            SELECTED_IMAGES.forEach((selectedImage) -> {
+            for (ImageView selectedImage : images) {
                 GC.drawImage(selectedImage.getImage(), 0, 0);
-            });
+            }
 
             SnapshotParameters sp = new SnapshotParameters();
             sp.setFill(Color.TRANSPARENT);
 
             return CV.snapshot(sp, null);
-        } else {
-            return null;
         }
+
+        return null;
     }
 
+    //List of Images
+    public static Image drawFromImageList(List<Image> images) {
+        Canvas CV = new Canvas(images.get(0).getWidth(), images.get(0).getHeight());
+        GraphicsContext GC = CV.getGraphicsContext2D();
+
+        for (Image image : images) {
+            GC.drawImage(image, 0, 0);
+        }
+
+        SnapshotParameters sp = new SnapshotParameters();
+        sp.setFill(Color.TRANSPARENT);
+
+        return CV.snapshot(sp, null);
+    }
 }

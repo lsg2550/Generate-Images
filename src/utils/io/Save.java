@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
-import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
+import static utils.io.IO.FILE_CHOOSER;
 
 /**
  *
@@ -14,21 +14,9 @@ import javax.imageio.ImageIO;
  */
 public class Save {
 
-    //Saving File
-    private static final FileChooser FILE_CHOOSER = new FileChooser();
-
-    public static void init() {
-        FILE_CHOOSER.setTitle("Save Image");
-        FILE_CHOOSER.setInitialDirectory(new File(System.getProperty("user.home")));
-        FILE_CHOOSER.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("PNG", "*.png"),
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                new FileChooser.ExtensionFilter("JPEG", "*.jpeg")
-        );
-    }
-
-    public static void saveFile(Image image) {
+    public static void save(Image image) {
         try {
+            FILE_CHOOSER.setTitle("Save Image");
             File saveFile = FILE_CHOOSER.showSaveDialog(null);
 
             if (saveFile != null) {
@@ -42,6 +30,40 @@ public class Save {
 
         } catch (NullPointerException | IOException | IllegalArgumentException ex) {
             GUIText.setUpdateText("Nothing to Save!");
+        }
+    }
+
+    public static void batchSave(Image image) {
+        File saveDirectory = new File("output/");
+
+        if (!saveDirectory.exists()) {
+            System.out.println("Creating Directory...");
+            saveDirectory.mkdirs();
+        } else {
+            System.out.println("Output Directory Found...");
+        }
+
+        int counter = 0;
+        boolean fileExists = true;
+
+        while (fileExists) {
+            String imageName = "/output" + counter + ".png";
+            File imageFileName = new File(saveDirectory.getAbsolutePath() + imageName);
+
+            if (imageFileName.exists()) {
+                //System.out.println("File Exists... Changing Name...");
+                counter++;
+            } else {
+                System.out.println("Generating New Image In: " + imageFileName.getAbsolutePath());
+
+                try {
+                    ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", imageFileName);
+                } catch (IOException ex) {
+                    System.out.println("Issue Saving File!");
+                } finally {
+                    fileExists = false;
+                }
+            }
         }
     }
 }

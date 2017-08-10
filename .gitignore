@@ -63,8 +63,15 @@ $RECYCLE.BIN/
 *.lnk
 
 # Custom Folders
-/build
-/dist
-/test
-/bfg
-/design
+/build/
+/dist/
+/test/
+/bfg/
+/design/
+/output/
+/testImages/
+
+# Custom Files
+.gitattributes
+build.xml
+manifest.mf

@@ -3,7 +3,7 @@ package gui;
 import assets.css.CSS;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import utils.io.Save;
+import utils.io.IO;
 import utils.thread.ThreadAlert;
 
 /**
@@ -26,13 +26,14 @@ public class Launcher extends Application {
         GUIBottom.init();
         GUICenter.init();
         MenuAbout.init();
-        MenuOpen.init();
+        MenuOpenGI.init();
+        MenuOpenBA.init();
         MenuSave.init();
         DisplayStage.init();
 
         //Utils Init
         ThreadAlert.init();
-        Save.init();
+        IO.init();
 
         //Show
         primaryStage.show();

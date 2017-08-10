@@ -1,8 +1,10 @@
 package gui;
 
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -49,7 +51,7 @@ class GUICenter { //NOT USED BY CLASSES OUTSIDE PACKAGE
         //Container for all nodes
         CENTER_ALL_CONTAINER_VBOX.heightProperty().isEqualTo(CENTER_ALL_CONTAINER_VBOX.getScene().getHeight(), 5);
         CENTER_ALL_CONTAINER_VBOX.widthProperty().isEqualTo(CENTER_ALL_CONTAINER_VBOX.getScene().getWidth(), 5);
-        CENTER_ALL_CONTAINER_VBOX.getChildren().addAll(GUICenterScrollPane.getSCROLLPANE_HOLDING_HBOX(), GENERATED_VBOX);
+        CENTER_ALL_CONTAINER_VBOX.getChildren().addAll(GUICenterScrollPane.getSCROLLPANE_HOLDING_HBOX(), new Separator(Orientation.HORIZONTAL), GENERATED_VBOX);
         CENTER_ALL_CONTAINER_VBOX.setAlignment(Pos.CENTER);
     }
 

@@ -6,19 +6,21 @@ package utils.benchmarking;
  */
 public class MemoryUsage {
 
-    public static long memoryUsageInBytes() {
+    //private final static int MEGABYTES = 1048576;
+    //private final static int GIGABYTES = 1073741824;
+    public static long currentHeapSize() {
         return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
     }
 
-    public static long memoryUsageInKBytes() {
-        return memoryUsageInBytes() / 1024;
+    public static long heapSize() {
+        return Runtime.getRuntime().totalMemory();
     }
 
-    public static long memoryUsageInMBytes() {
-        return memoryUsageInKBytes() / 1024;
+    public static long freeHeapSize() {
+        return Runtime.getRuntime().freeMemory();
     }
 
-    public static void memoryUsage() { //Logging
-        System.out.println("Memory Used: " + MemoryUsage.memoryUsageInMBytes() + "MB");
+    public static long maxHeapSize() {
+        return Runtime.getRuntime().maxMemory();
     }
 }

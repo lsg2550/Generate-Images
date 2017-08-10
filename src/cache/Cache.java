@@ -37,7 +37,7 @@ public class Cache implements Runnable {
 
                 //Update Text
                 Platform.runLater(() -> {
-                    GUIProgressBar.getpBar().setProgress(25.0);
+                    GUIProgressBar.getpBar().setProgress(0.25);
                     GUIText.setUpdateText("Loading Images...");
                 });
 
@@ -74,11 +74,11 @@ public class Cache implements Runnable {
 
                 //Test for User Cancellation
                 try {
-                    GUIProgressBar.getpBar().setProgress(50.0);
+                    GUIProgressBar.getpBar().setProgress(0.50);
                     Thread.sleep(200);
                 } catch (InterruptedException ex) {
                     Platform.runLater(() -> {
-                        GUIProgressBar.getpBar().setProgress(0.0);
+                        GUIProgressBar.getpBar().setProgress(0);
                         GUIText.setUpdateText("Process Halted");
                         GUIText.setDirectoryText(""); //Because the check if the current directory is already selected will trigger even if load was canceled
                     });
@@ -95,7 +95,7 @@ public class Cache implements Runnable {
 
                 //DONE
                 Platform.runLater(() -> {
-                    GUIProgressBar.getpBar().setProgress(1);
+                    GUIProgressBar.getpBar().setProgress(1.0);
                     GUIText.setUpdateText("Done!");
                 });
                 return;

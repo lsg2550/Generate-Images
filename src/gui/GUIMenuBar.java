@@ -18,14 +18,16 @@ class GUIMenuBar { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
     static void init() {
         //Menu
-        Menu file = new Menu("File"), help = new Menu("Help");
+        Menu file = new Menu("File"), help = new Menu("Help"); //Main GUI
+        Menu open = new Menu("Open"); //SubMenu
 
         //Menu Children
         MENU_BAR.getMenus().addAll(file, help, GUIText.getDirectoryTextMenu());
 
         //MenuItem
-        MenuItem open = new MenuItem("Open"), //File Menu
-                save = new MenuItem("Save"),
+        MenuItem openGI = new MenuItem("Image-Gen"), //Open Menu
+                openBA = new MenuItem("Batch");
+        MenuItem save = new MenuItem("Save"), //File Menu
                 exit = new MenuItem("Exit");
         MenuItem about = new MenuItem("About"), //Help Menu
                 settings = new MenuItem("Settings");
@@ -33,17 +35,20 @@ class GUIMenuBar { //NOT USED BY CLASSES OUTSIDE PACKAGE
         //Children
         file.getItems().addAll(open, save, new SeparatorMenuItem(), exit);
         help.getItems().addAll(about, settings);
+        open.getItems().addAll(openGI, openBA);
 
         //Handlers
-        open.setOnAction(e -> {
+        openGI.setOnAction(e -> {
             if (Settings.loadTypeWindow) {
-                MenuOpen.show();
+                MenuOpenGI.show();
             }
             BuildThread.runBuild();
         });
+        openBA.setOnAction(e -> {
+            MenuOpenBA.show();
+        });
         save.setOnAction(e -> {
             MenuSave.show(); //Window to display chosen images where user will be able to re-arrange order etc before writing image
-            //Save.saveFile(DisplayGUIPreviewImageView.getImageFromImageView());
         });
         exit.setOnAction(e -> {
             Thread.currentThread().interrupt();
@@ -60,5 +65,4 @@ class GUIMenuBar { //NOT USED BY CLASSES OUTSIDE PACKAGE
     static MenuBar getMENU_BAR() {
         return MENU_BAR;
     }
-
 }

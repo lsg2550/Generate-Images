@@ -26,7 +26,7 @@ class MenuSettings {
     static void init() {
         //Root
         VBox root = new VBox();
-        root.setAlignment(Pos.TOP_CENTER);
+        root.setAlignment(Pos.CENTER);
 
         //Label
         Label loadTypeSettings = new Label("Load Type Settings");
@@ -50,11 +50,11 @@ class MenuSettings {
         root.getChildren().addAll(loadTypeSettings, LOAD_TYPE, LOAD_TYPE_WINDOW, sep1, otherSettings);
 
         //Scene
-        scene = new Scene(root, 250, 75);
+        scene = new Scene(root, 250, 100);
     }
 
     static void show() {
-        //CheckBox Initialize
+        //CheckBox Update
         LOAD_TYPE.setSelected(Settings.loadType);
         LOAD_TYPE_WINDOW.setSelected(Settings.loadTypeWindow);
 

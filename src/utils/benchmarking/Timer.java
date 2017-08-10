@@ -4,7 +4,7 @@ package utils.benchmarking;
  *
  * @author Luis
  */
-public class Logging {
+public class Timer {
 
     private static long startTime, endTime;
 

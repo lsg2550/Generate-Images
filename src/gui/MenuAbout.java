@@ -36,7 +36,7 @@ class MenuAbout { //NOT USED BY CLASSES OUTSIDE PACKAGE
         root.getChildren().addAll(imageView, info);
 
         //Scene
-        scene = new Scene(root, 150, 100);
+        scene = new Scene(root, 150, 105);
     }
 
     static void show() {

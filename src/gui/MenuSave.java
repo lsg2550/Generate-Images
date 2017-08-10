@@ -2,7 +2,6 @@ package gui;
 
 import cache.CacheList;
 import java.util.ArrayList;
-import java.util.Iterator;
 import utils.drawing.DrawPreview;
 import java.util.List;
 import java.util.Map;
@@ -76,13 +75,16 @@ class MenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
         //Handlers
         save.setOnAction(e -> {
-            Save.saveFile(DrawPreview.draw(new ArrayList<>(updateObservableList(images))));
+            Save.save(DrawPreview.drawFromImageViewList(new ArrayList<>(updateObservableList(images))));
             DisplayStage.close();
         });
 
         preview.setOnAction(e -> {
-            dgps.setPreviewImage(DrawPreview.draw(new ArrayList<>(updateObservableList(images))));
-            dgps.show();
+            try {
+                dgps.setPreviewImage(DrawPreview.drawFromImageViewList(new ArrayList<>(updateObservableList(images))));
+                dgps.show();
+            } catch (NullPointerException ex) {
+            }
         });
 
         cancel.setOnAction(e -> {
@@ -184,15 +186,19 @@ class MenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKAGE
     }
 
     private static List<ImageView> updateObservableList(List<ImageView> oldList) {
-        List<ImageView> newList = new ArrayList(oldList.size());
+        if (oldList != null) {
+            List<ImageView> newList = new ArrayList(oldList.size());
 
-        for (ImageView imageView : oldList) {
-            if (!imageView.isDisabled()) {
-                newList.add(imageView);
+            for (ImageView imageView : oldList) {
+                if (!imageView.isDisabled()) {
+                    newList.add(imageView);
+                }
             }
+
+            return newList;
         }
 
-        return newList;
+        return null;
     }
 
     /**

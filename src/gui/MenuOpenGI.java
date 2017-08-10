@@ -17,7 +17,7 @@ import utils.settings.Settings;
  *
  * @author Luis
  */
-class MenuOpen {
+class MenuOpenGI {
 
     //Scene
     private static Scene scene;

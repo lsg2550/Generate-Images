@@ -2,6 +2,7 @@ package utils.parsing;
 
 import java.io.File;
 import java.util.List;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -29,6 +30,10 @@ public class TryParse {
 
     public static boolean TryInteger(Object o) {
         return o instanceof Integer;
+    }
+
+    public static boolean TryImage(Object o) {
+        return o instanceof Image;
     }
 
     public static int TryInt(String o) {

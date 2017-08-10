@@ -13,7 +13,7 @@ public class BuildThread {
 
     public static void runBuild() {
         if (!buildThread.isAlive()) {
-            Cache cache = new Cache(Read.readDirectory());
+            Cache cache = new Cache(Read.read());
 
             buildThread = new Thread(cache);
             buildThread.start();
@@ -22,7 +22,7 @@ public class BuildThread {
         }
     }
 
-    protected static void interruptThread() {
+    static void interruptThread() {
         buildThread.interrupt();
     }
 }

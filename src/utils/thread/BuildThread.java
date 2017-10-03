@@ -1,6 +1,6 @@
 package utils.thread;
 
-import cache.Cache;
+import utils.cache.Cache;
 import utils.io.Read;
 
 /**

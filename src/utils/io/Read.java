@@ -60,7 +60,7 @@ public class Read {
                 );
 
                 //If the folder read is empty, don't add the empty File[] array to the arraylist
-                if (!Arrays.asList(temp).isEmpty()) {
+                if (temp != null) {
                     selectedDirectoryFiles.add(temp);
                 }
             }

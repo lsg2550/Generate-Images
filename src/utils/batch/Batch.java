@@ -27,7 +27,7 @@ public class Batch {
         this.subDirectories = subDirectories;
         imageListToBuild = new ArrayList<>(MPC.maximumPossibleCombination_From2DArray(subDirectories, -1));
 
-        batch(null);
+        batchPrimary(null);
     }
 
     public Batch(Image[] baseDirectory, Image[][] subDirectories) {
@@ -35,13 +35,12 @@ public class Batch {
         imageListToBuild = new ArrayList<>(MPC.maximumPossibleCombination_From2DArray(subDirectories, baseDirectory.length));
 
         for (Image image : baseDirectory) {
-            batch(image);
+            batchPrimary(image);
         }
     }
 
     public void batchSave() {
         //Save Images
-        System.out.println("ImageList To Build Size: " + imageListToBuild.size());
         for (Image image : imageListToBuild) {
             Save.batchSave(image);
         }
@@ -50,10 +49,9 @@ public class Batch {
         imageListToBuild = null;
         baseImage = null;
         subDirectories = null;
-        System.gc();
     }
 
-    private void batch(Image base) {
+    private void batchPrimary(Image base) {
         //Set Base Image - We WANT the base image to be the first index
         if (base == null) {
             tempImageList.add(0, baseImage);
@@ -81,11 +79,8 @@ public class Batch {
 
                 //Check if more rows exist, if they do move on to the next row, o/w move on to the next column (if any)
                 if (rowIndex + 1 < subDirectories.length) {
-                    System.out.println((subDirectories.length - rowIndex + 1) + " Rows Remaining - Continuing to Next Row...");
                     batchSecondary(rowIndex + 1);
                 }
-
-                System.out.println("No More Rows Exist..." + System.lineSeparator() + "Continuing to Next Column...");
             }
         }
     }

@@ -1,4 +1,4 @@
-package cache;
+package utils.cache;
 
 import utils.drawing.DrawPreview;
 import gui.GUICenterScrollPane;

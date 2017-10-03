@@ -21,15 +21,16 @@ public class Launcher extends Application {
         //GUI Init
         GUICenterScrollPane.init();
         GUIPreviewImageView.init();
+        DisplayStage.init();
         MenuSettings.init();
         GUIMenuBar.init();
+        MenuOpenGI.init();
+        MenuOpenBA.init();
         GUIBottom.init();
         GUICenter.init();
         MenuAbout.init();
-        MenuOpenGI.init();
-        MenuOpenBA.init();
         MenuSave.init();
-        DisplayStage.init();
+        GUIText.init();
 
         //Utils Init
         ThreadAlert.init();

@@ -1,4 +1,4 @@
-package cache;
+package utils.cache;
 
 import gui.GUIPreviewImageView;
 import gui.DisplayStage;

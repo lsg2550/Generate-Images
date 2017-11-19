@@ -70,6 +70,7 @@ $RECYCLE.BIN/
 /design/
 /output/
 /testImages/
+/nbproject/
 
 # Custom Files
 .gitattributes

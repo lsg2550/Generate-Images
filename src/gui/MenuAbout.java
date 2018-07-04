@@ -40,8 +40,8 @@ class MenuAbout { //NOT USED BY CLASSES OUTSIDE PACKAGE
     }
 
     static void show() {
-        DisplayStage.setResizable(false);
-        DisplayStage.setScene(scene);
-        DisplayStage.show();
+        SecondaryStage.setResizable(false);
+        SecondaryStage.setScene(scene);
+        SecondaryStage.show();
     }
 }

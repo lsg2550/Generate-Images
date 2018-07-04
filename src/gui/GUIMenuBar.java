@@ -5,7 +5,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import utils.settings.Settings;
-import utils.thread.BuildThread;
+import utils.imagegeneration.thread.BuildThread;
 
 /**
  *
@@ -25,27 +25,25 @@ class GUIMenuBar { //NOT USED BY CLASSES OUTSIDE PACKAGE
         MENU_BAR.getMenus().addAll(file, help, GUIText.getDirectoryTextMenu());
 
         //MenuItem
-        MenuItem openGI = new MenuItem("Image-Gen"), //Open Menu
-                openBA = new MenuItem("Batch");
-        MenuItem save = new MenuItem("Save"), //File Menu
-                exit = new MenuItem("Exit");
-        MenuItem about = new MenuItem("About"), //Help Menu
-                settings = new MenuItem("Settings");
+        MenuItem openImgGen = new MenuItem("Image-Generation"), openBatGen = new MenuItem("Batch-Generation"); //Open Menu
+        MenuItem save = new MenuItem("Save Image"), exit = new MenuItem("Exit"); //File Menu
+        MenuItem about = new MenuItem("About"), settings = new MenuItem("Settings"), howto = new MenuItem("How-To"); //Help Menu
 
         //Children
         file.getItems().addAll(open, save, new SeparatorMenuItem(), exit);
-        help.getItems().addAll(about, settings);
-        open.getItems().addAll(openGI, openBA);
+        help.getItems().addAll(about, settings, howto);
+        open.getItems().addAll(openImgGen, openBatGen);
 
         //Handlers
-        openGI.setOnAction(e -> {
-            if (Settings.loadTypeWindow) {
-                MenuOpenGI.show();
+        openImgGen.setOnAction(e -> {
+            if (Settings.INSTANCE.isLoadTypeWindow()) {
+                MenuOpenGenerateImage.show();
             }
+
             BuildThread.runBuild();
         });
-        openBA.setOnAction(e -> {
-            MenuOpenBA.show();
+        openBatGen.setOnAction(e -> {
+            MenuOpenGenerateBatch.show();
         });
         save.setOnAction(e -> {
             MenuSave.show(); //Window to display chosen images where user will be able to re-arrange order etc before writing image
@@ -59,6 +57,9 @@ class GUIMenuBar { //NOT USED BY CLASSES OUTSIDE PACKAGE
         });
         settings.setOnAction(e -> {
             MenuSettings.show();
+        });
+        howto.setOnAction(e -> {
+            MenuHowTo.show();
         });
     }
 

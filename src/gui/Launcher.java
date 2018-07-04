@@ -3,8 +3,8 @@ package gui;
 import assets.css.CSS;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import utils.io.IO;
-import utils.thread.ThreadAlert;
+import utils.operations.io.IO;
+import utils.imagegeneration.thread.ThreadAlert;
 
 /**
  *
@@ -21,16 +21,17 @@ public class Launcher extends Application {
         //GUI Init
         GUICenterScrollPane.init();
         GUIPreviewImageView.init();
-        DisplayStage.init();
-        MenuSettings.init();
         GUIMenuBar.init();
-        MenuOpenGI.init();
-        MenuOpenBA.init();
         GUIBottom.init();
         GUICenter.init();
-        MenuAbout.init();
-        MenuSave.init();
         GUIText.init();
+        MenuSettings.init();
+        MenuOpenGenerateImage.init();
+        MenuOpenGenerateBatch.init();
+        MenuAbout.init();
+        MenuHowTo.init();
+        MenuSave.init();
+        SecondaryStage.init();
 
         //Utils Init
         ThreadAlert.init();

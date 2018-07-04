@@ -43,8 +43,8 @@ class GUICenter { //NOT USED BY CLASSES OUTSIDE PACKAGE
         GENERATED_VBOX.setOnMouseClicked(e -> {
             if (GUIPreviewImageView.containsImage()) {
                 iv.setImage(GUIPreviewImageView.getImageFromImageView());
-                DisplayStage.setScene(scene);
-                DisplayStage.show();
+                SecondaryStage.setScene(scene);
+                SecondaryStage.show();
             }
         });
 

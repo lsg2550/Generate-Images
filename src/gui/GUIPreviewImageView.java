@@ -12,6 +12,8 @@ public class GUIPreviewImageView { //USED BY CLASSES OUTSIDE PACKAGE
     private static final ImageView PREVIEW_IMAGEVIEW = new ImageView();
 
     static void init() {
+        //PREVIEW_IMAGEVIEW.fitHeightProperty().bind(PREVIEW_IMAGEVIEW.getParent().getScene().heightProperty());
+        //PREVIEW_IMAGEVIEW.fitWidthProperty().bind(PREVIEW_IMAGEVIEW.getParent().getScene().widthProperty());
         PREVIEW_IMAGEVIEW.setFitHeight(235);
         PREVIEW_IMAGEVIEW.setFitWidth(235);
     }

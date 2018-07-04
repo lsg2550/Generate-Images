@@ -1,8 +1,8 @@
 package gui;
 
-import utils.cache.CacheList;
+import utils.imagegeneration.CacheList;
 import java.util.ArrayList;
-import utils.drawing.DrawPreview;
+import utils.operations.drawing.DrawPreview;
 import java.util.List;
 import java.util.Map;
 import javafx.beans.value.ObservableValue;
@@ -22,9 +22,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import utils.cloning.ImageClone;
-import utils.io.Save;
-import utils.parsing.TryParse;
+import utils.operations.cloning.ImageClone;
+import utils.operations.io.IO;
+import utils.operations.parsing.TryParse;
 
 /**
  *
@@ -75,8 +75,8 @@ class MenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKAGE
 
         //Handlers
         save.setOnAction(e -> {
-            Save.save(DrawPreview.drawFromImageViewList(new ArrayList<>(updateObservableList(images))));
-            DisplayStage.close();
+            IO.saveImage(DrawPreview.drawFromImageViewList(new ArrayList<>(updateObservableList(images))));
+            SecondaryStage.close();
         });
 
         preview.setOnAction(e -> {
@@ -88,7 +88,7 @@ class MenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKAGE
         });
 
         cancel.setOnAction(e -> {
-            DisplayStage.close();
+            SecondaryStage.close();
         });
 
         //Listeners
@@ -110,9 +110,9 @@ class MenuSave implements Cloneable { //NOT USED BY CLASSES OUTSIDE PACKAGE
         grabImages();
 
         //Show
-        DisplayStage.setResizable(false);
-        DisplayStage.setScene(saveScene);
-        DisplayStage.show();
+        SecondaryStage.setResizable(false);
+        SecondaryStage.setScene(saveScene);
+        SecondaryStage.show();
     }
 
     private static void grabImages() {

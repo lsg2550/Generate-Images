@@ -22,7 +22,7 @@ class GUI { //NOT USED BY CLASSES OUTSIDE PACKAGE
         Scene scene = new Scene(borderPane, 800, 600);
         primaryStage.setTitle("Generate Images");
         primaryStage.getIcons().add(Icon.ICON);
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
         primaryStage.setScene(scene);
     }
 

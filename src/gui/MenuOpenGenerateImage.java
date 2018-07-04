@@ -9,68 +9,69 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import utils.settings.Settings;
 
 /**
  *
  * @author Luis
  */
-class MenuSettings {
+class MenuOpenGenerateImage {
 
     //Scene
     private static Scene scene;
 
     //CheckBox
     private final static CheckBox LOAD_TYPE = new CheckBox("Single/Multiple");
-    private final static CheckBox LOAD_TYPE_WINDOW = new CheckBox("Show Load Type Window");
+    private final static CheckBox LOAD_TYPE_WINDOW = new CheckBox("Don't Ask Me Again");
 
     static void init() {
-        //Root
+        //VBox - Root
         VBox root = new VBox();
         root.setAlignment(Pos.CENTER);
 
-        //Label
-        Label loadTypeSettings = new Label("Load Type Settings");
-        loadTypeSettings.setAlignment(Pos.CENTER);
-        Label otherSettings = new Label("Other Settings");
-        otherSettings.setAlignment(Pos.CENTER);
-
-        //Separator 1 & 2
+        //Separator
         Separator sep1 = new Separator(Orientation.HORIZONTAL);
-        Separator sep2 = new Separator(Orientation.HORIZONTAL);
         sep1.setPadding(new Insets(5, 0, 0, 0));
-        sep2.setPadding(new Insets(10, 0, 0, 0));
-        sep2.setVisible(false);
 
-        //CheckBox
+        //Label
+        Label loadTypeLabel = new Label("Load a Single Directory or Multiple Directories");
+        Label windowLabel = new Label("You can re-enable the popup or change loadtype in Help -> Settings");
+        windowLabel.setFont(Font.font(null, FontWeight.BOLD, 10));
+        windowLabel.setTextAlignment(TextAlignment.CENTER);
+        windowLabel.setWrapText(true);
+
+        //Button
+        Button buttonContinue = new Button("Continue");
+
+        //Handlers
         LOAD_TYPE.selectedProperty().addListener(((observable, oldValue, newValue) -> {
             Settings.INSTANCE.setLoadType(newValue);
         }));
         LOAD_TYPE_WINDOW.selectedProperty().addListener(((observable, oldValue, newValue) -> {
-            Settings.INSTANCE.setLoadTypeWindow(newValue);
+            Settings.INSTANCE.setLoadTypeWindow(!newValue);
         }));
-
-        //Button
-        Button buttonClose = new Button("Close");
-        buttonClose.setOnAction(e -> {
+        buttonContinue.setOnAction(e -> {
             SecondaryStage.close();
         });
 
         //Children
-        root.getChildren().addAll(loadTypeSettings, LOAD_TYPE, LOAD_TYPE_WINDOW, sep1, otherSettings, sep2, buttonClose);
+        root.getChildren().addAll(loadTypeLabel, LOAD_TYPE, LOAD_TYPE_WINDOW, sep1, windowLabel, buttonContinue);
 
         //Scene
-        scene = new Scene(root, 275, 115);
+        scene = new Scene(root, 350, 100);
     }
 
     static void show() {
-        //CheckBox Update
+        //CheckBox Initialize
         LOAD_TYPE.setSelected(Settings.INSTANCE.isLoadType());
-        LOAD_TYPE_WINDOW.setSelected(Settings.INSTANCE.isLoadTypeWindow());
+        LOAD_TYPE_WINDOW.setSelected(!Settings.INSTANCE.isLoadTypeWindow());
 
         //Show
         SecondaryStage.setResizable(false);
         SecondaryStage.setScene(scene);
-        SecondaryStage.show();
+        SecondaryStage.showAndWait();
     }
 }
